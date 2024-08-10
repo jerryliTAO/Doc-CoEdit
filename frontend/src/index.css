@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.item {
+  @apply mr-3 h-6 text-lime-500 text-center bg-red-100 rounded-full;
+}
+
+.describeText {
+  @apply font-serif md:text-2xl text-xs;
+}
+
+.loginItem {
+  @apply border-2 border-white rounded-md font-black text-white;
+}
+
+.menuItem {
+  @apply flex items-center mb-3 h-10 min-w-0 text-lime-500 sm:mb-5 rounded-sm hover:bg-gray-200 pl-2 cursor-pointer font-semibold;
+}
+
+.docCard {
+  @apply w-60 shadow-lg rounded-md border hover:bg-gray-200 hover:cursor-pointer;
+}
