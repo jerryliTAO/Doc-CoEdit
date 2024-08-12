@@ -34,5 +34,7 @@
     "uploadDesc2": "只允許PNG JPEG GIF",
     "addUser": "輸入email新增共用",
     "userList1": "使用者名單",
-    "userList2": "您尚未與他人共用"
+    "userList2": "您尚未與他人共用",
+    "deleteWarn": "您的共用權限被移除",
+    "backToHomepage": "返回首頁"
 }

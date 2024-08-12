@@ -4,13 +4,14 @@
     <div
         class="flex justify-between items-center h-12 w-900 tablet:w-full bg-gray-300 border-b-2 border-gray-200 print:hidden">
         <div class="flex items-center">
-            <div class="w-10 h-10 ml-5">
+            <div class="flex justify-center items-center w-10 h-10 ml-5">
                 <RouterLink :to="{ path: '/user' }">
                     <img src="@/images/logo.png" alt="" class="hover:cursor-pointer">
                 </RouterLink>
             </div>
             <input type="text" name="title" ref="title"
-                class="ml-5 mb-2 bg-gray-300 font-serif focus:outline-blue-300 focus:border-none" v-model="docTitle">
+                class="ml-5 bg-gray-300 font-serif focus:outline-blue-300 focus:border-none text-2xl font-semibold"
+                v-model="docTitle">
         </div>
 
         <div class="flex items-center mr-5">
@@ -33,8 +34,8 @@
         <div id="editor" ref="editor"></div>
     </div>
     <OnlineList></OnlineList>
-
     <UserList></UserList>
+    <DeleteWarn></DeleteWarn>
 
 </template>
 
@@ -45,6 +46,7 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import DeleteWarn from './DeleteWarn.vue';
 import OnlineList from './OnlineList.vue';
 import UserList from './UserList.vue';
 
