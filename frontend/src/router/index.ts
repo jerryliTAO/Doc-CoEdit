@@ -1,3 +1,4 @@
+import Editor from '@/components/editor/Editor.vue'
 import HomePage from '@/components/Homepage.vue'
 import User from '@/components/user/User.vue'
 import UserHome from '@/components/user/UserHome.vue'
@@ -47,6 +48,11 @@ const router = createRouter({
       }
     ]
     },
+    {
+      path:'/editor',
+      name:'editor',
+      component:Editor
+    }
   ]
 })
 

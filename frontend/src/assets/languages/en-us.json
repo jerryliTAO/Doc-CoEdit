@@ -31,5 +31,8 @@
     "save": "Save",
     "warn2": "Type error. Only access png/jpeg/gif.",
     "uploadDesc1": "Click to upload or drag an image here.",
-    "uploadDesc2": "PNG JPEG GI only."
+    "uploadDesc2": "PNG JPEG GI only.",
+    "addUser": "Input email to grant access.",
+    "userList1": "User List",
+    "userList2": "There're no shared users."
 }

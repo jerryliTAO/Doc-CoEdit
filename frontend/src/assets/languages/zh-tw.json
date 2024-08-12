@@ -31,5 +31,8 @@
     "save": "儲　存",
     "warn2": "格式錯誤:只允許PNG JPEG GI檔",
     "uploadDesc1": "點擊上傳或將圖片拖曳至此",
-    "uploadDesc2": "只允許PNG JPEG GIF"
+    "uploadDesc2": "只允許PNG JPEG GIF",
+    "addUser": "輸入email新增共用",
+    "userList1": "使用者名單",
+    "userList2": "您尚未與他人共用"
 }
