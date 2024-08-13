@@ -15,18 +15,9 @@
             <div>{{ $t("modify") }}</div>
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
-                <RouterLink :to="{ path: '/' }" v-for="n in 5">
-                    <div class="docCard">
-                        <div class="w-full h-48 p-2">
-                            <img src="@/images/meeting.png" class="w-full h-full object-cover" alt="">
-                        </div>
-                        <div class="pl-2">
-                            <div class="text-xs">標　題:</div>
-                            <div class="text-xs">擁有者:</div>
-                            <div class="text-xs">最後修改:</div>
-                        </div>
-                    </div>
-                </RouterLink>
+                <DocCard v-for="doc in mockDataModified" :id="doc.id" :title="doc.title" :owner="doc.owner"
+                    :lastmodified="doc.lastmodified" :image="doc.image">
+                </DocCard>
             </div>
         </div>
     </div>
@@ -38,18 +29,9 @@
             <div>{{ $t("open") }}</div>
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
-                <RouterLink :to="{ path: '/' }" v-for="n in 5">
-                    <div class="docCard">
-                        <div class="w-full h-48 p-2">
-                            <img src="@/images/background.jpg" class="w-full h-full object-cover" alt="">
-                        </div>
-                        <div class="pl-2">
-                            <div class="text-xs">標　題:</div>
-                            <div class="text-xs">擁有者:</div>
-                            <div class="text-xs">最後修改:</div>
-                        </div>
-                    </div>
-                </RouterLink>
+                <DocCard v-for="doc in mockDataOpened" :id="doc.id" :title="doc.title" :owner="doc.owner"
+                    :lastmodified="doc.lastmodified" :image="doc.image">
+                </DocCard>
             </div>
         </div>
     </div>
@@ -57,8 +39,28 @@
 
 
 <script lang='ts' setup>
-import { RouterLink } from 'vue-router';
+import DocCard from '@/components/user/DocCard.vue';
+import { reactive } from 'vue';
 
+//this is for testing
+let mockDataModified = reactive([
+    { id: '123', title: '1', owner: 'jerry', lastmodified: '123-1561', image: '/src/images/background.jpg' },
+    { id: '456', title: '2', owner: 'jey', lastmodified: '123-1561', image: '/src/images/background.jpg' },
+    { id: '789', title: '3', owner: 'rry', lastmodified: '123-1561', image: '/src/images/background.jpg' },
+    { id: '1011', title: '4', owner: 'jry', lastmodified: '123-1561', image: '/src/images/background.jpg' },
+    { id: '1012', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/background.jpg' },
+])
+let mockDataOpened = reactive([
+    { id: '987', title: '1', owner: 'jerry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '654', title: '2', owner: 'jey', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '321', title: '3', owner: 'rry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '321654', title: '4', owner: 'jry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '987456312', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '4521', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '3254234', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '45245342', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '452148345584', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+])
 
 </script>
 

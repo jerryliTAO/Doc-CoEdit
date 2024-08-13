@@ -4,18 +4,9 @@
             <div class="font-semibold text-3xl">{{ $t("mydoc") }}</div>
             <hr class="w-32">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
-                <RouterLink :to="{ path: '/' }" v-for="n in 8">
-                    <div class="docCard">
-                        <div class="w-full h-48 p-2">
-                            <img src="@/images/background.jpg" class="w-full h-full object-cover" alt="">
-                        </div>
-                        <div class="pl-2">
-                            <div class="text-xs">標　題:</div>
-                            <div class="text-xs">擁有者:</div>
-                            <div class="text-xs">最後修改:</div>
-                        </div>
-                    </div>
-                </RouterLink>
+                <DocCard v-for="doc in mockData" :id="doc.id" :title="doc.title" :owner="doc.owner"
+                    :lastmodified="doc.lastmodified" :image="doc.image">
+                </DocCard>
             </div>
         </div>
     </div>
@@ -23,8 +14,15 @@
 
 
 <script lang='ts' setup>
-import { RouterLink } from 'vue-router';
-
+import DocCard from '@/components/user/DocCard.vue';
+import { reactive } from 'vue';
+let mockData = reactive([
+    { id: '123', title: '1', owner: 'jerry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '456', title: '2', owner: 'jey', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '789', title: '3', owner: 'rry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '1011', title: '4', owner: 'jry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+    { id: '1012', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
+])
 
 </script>
 
