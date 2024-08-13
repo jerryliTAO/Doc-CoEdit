@@ -15,7 +15,9 @@
     "password": "Password",
     "forgotPassword": "Forgot Password?",
     "newDoc-CoEdit": "New to Doc-CoEdit?",
-    "sing up": "Sign up now.",
+    "sing_up1": "Sign up now.",
+    "sign_up2": "Sign up",
+    "backToLogin": "Back to Sing In.",
     "home": "Home",
     "profile": "Profile",
     "mydoc": "My Docs",
@@ -38,5 +40,9 @@
     "userList2": "There're no shared users.",
     "deleteWarn": "Access to the document are removed.",
     "backToHomepage": "Back to Home Page",
-    "sure": "Are you sure to delete ?"
+    "sure": "Are you sure to delete ?",
+    "title": "Title",
+    "owner": "Owner",
+    "lastModified": "LastModified",
+    "lastOpened": "LastOpened"
 }

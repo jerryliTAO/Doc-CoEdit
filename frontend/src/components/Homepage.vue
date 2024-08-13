@@ -11,7 +11,19 @@
 
             <!-- 之後引入 login.vue -->
             <div class=" flex flex-col items-center m-3">
-                <Login />
+                <Login v-show="isShow">
+                    <div class="text-center mt-10">
+                        <p class="">{{ $t("newDoc-CoEdit") }}</p>
+                        <div class="font-black hover:underline cursor-pointer" @click="isShow = !isShow">{{
+                            $t("sing_up1") }}</div>
+                    </div>
+                </Login>
+                <SignUp v-show="!isShow">
+                    <div class="text-center">
+                        <div class="font-black hover:underline cursor-pointer " @click="isShow = !isShow">{{
+                            $t("backToLogin") }}</div>
+                    </div>
+                </SignUp>
             </div>
         </div>
 
@@ -88,14 +100,12 @@ import 'vue-loading-overlay/dist/css/index.css';
 import Header from './Header.vue';
 
 import Login from './Login.vue';
+import SignUp from './SignUp.vue';
 
 
 let isLoading = ref(false)
-let isShow = ref(false)
-let show = function () {
-    isShow.value = true
-    console.log(isShow.value)
-}
+let isShow = ref(true)
+
 
 
 

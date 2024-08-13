@@ -11,9 +11,9 @@
                 <img :src="image" class="w-full h-full object-cover" alt="" ref="displayCover">
             </div>
             <div class="pl-2">
-                <div class="text-xs">標　題:{{ title }}</div>
-                <div class="text-xs">擁有者:{{ owner }}</div>
-                <div class="text-xs">最後修改:{{ lastmodified }}</div>
+                <div class="text-xs">{{ $t('title') }}：{{ title }}</div>
+                <div class="text-xs">{{ $t('owner') }}：{{ owner }}</div>
+                <slot></slot>
             </div>
         </RouterLink>
     </div>

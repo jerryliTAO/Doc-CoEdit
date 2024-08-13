@@ -4,7 +4,7 @@
             <div class="w-full h-12 flex justify-between items-center bg-gray-700" ref="container">
                 <img src="../images/menu.png" class="h-10 ml-3 hover:cursor-pointer" alt="" v-if="token"
                     @click="showMenu" />
-                <img src="../images/logo.png" class="h-11 ml-3 hover:cursor-pointer" alt="" v-else />
+                <img src="../images/logo.png" class="h-11 ml-3" alt="" v-else />
 
                 <div class="text-base text-center md:text-2xl font-bold" v-show="!token">{{ $t('welcome') }}</div>
                 <div class="flex items-center">
@@ -12,9 +12,12 @@
                         <option value="zh-tw">繁體中文</option>
                         <option value="en-us">English</option>
                     </select>
-                    <button class="item px-2 hover:bg-yellow-300 font-serif" v-show="token">
-                        {{ $t('logout') }}
-                    </button>
+                    <RouterLink :to="{ path: '/' }" @click="logout">
+                        <button class="item px-2 hover:bg-yellow-300 font-serif" v-show="token">
+                            {{ $t('logout') }}
+                        </button>
+                    </RouterLink>
+
                 </div>
             </div>
         </nav>
@@ -31,12 +34,13 @@ import { ChangeLanguage, setLanguage } from '@/hooks/useI18n';
 import { useMenuStore } from '@/stores/menu';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { RouterLink } from 'vue-router';
 
 
 let language_option = ref();
 const i18n = useI18n();
 let locale: string | null
-let token = localStorage.getItem("token")
+let token = ref(localStorage.getItem("token"))
 let container = ref()
 
 
@@ -68,12 +72,18 @@ window.addEventListener('scroll', () => {
     }
 })
 
+//logout
+const logout = () => {
+    localStorage.clear();
+}
+
 onMounted(() => {
+    console.log(token.value)
     setLanguage(i18n, locale)
     language_option.value.value = i18n.locale.value
 
     // setting background color
-    if (token == null) {
+    if (token.value == null) {
         container.value.style.background = "white";
     }
 

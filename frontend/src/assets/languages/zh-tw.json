@@ -15,7 +15,9 @@
     "password": "密碼",
     "forgotPassword": "忘記密碼?",
     "newDoc-CoEdit": "尚未加入Doc-CoEdit?",
-    "sing up": "馬上註冊",
+    "sing_up1": "馬上註冊",
+    "sign_up2": "註冊",
+    "backToLogin": "返回",
     "home": "首　　頁",
     "profile": "個人資料",
     "mydoc": "我的文件",
@@ -38,5 +40,9 @@
     "userList2": "您尚未與他人共用",
     "deleteWarn": "您的共用權限被移除",
     "backToHomepage": "返回首頁",
-    "sure": "確定要刪除文件嗎 ?"
+    "sure": "確定要刪除文件嗎 ?",
+    "title": "標　　題",
+    "owner": "作　　者",
+    "lastModified": "最後修改",
+    "lastOpened": "最後開啟"
 }

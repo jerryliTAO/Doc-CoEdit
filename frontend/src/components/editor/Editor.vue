@@ -49,6 +49,7 @@
 import { useDeleteStore } from '@/stores/delete';
 import { useUserListStore } from '@/stores/user';
 import Quill from 'quill';
+import QuillResizeImage from 'quill-resize-image';
 import 'quill/dist/quill.snow.css';
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
@@ -56,7 +57,6 @@ import Delete from './Delete.vue';
 import LostAccess from './LostAccess.vue';
 import OnlineList from './OnlineList.vue';
 import UserList from './UserList.vue';
-
 const editor = ref();
 let docTitle = ref('檔案名稱');
 
@@ -65,6 +65,7 @@ let exportPDF = () => {
 }
 
 onMounted(() => {
+    Quill.register("modules/resize", QuillResizeImage)
     const quill = new Quill(editor.value, {
         theme: 'snow',
         modules: {
@@ -82,7 +83,10 @@ onMounted(() => {
                 [{ color: [] }, { background: [] }],
                 ['link', 'image'],
                 ['clean']
-            ]
+            ],
+            resize: {
+                locale: {},
+            },
         }
     })
 })

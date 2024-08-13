@@ -17,6 +17,7 @@
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
                 <DocCard v-for="doc in mockDataModified" :id="doc.id" :title="doc.title" :owner="doc.owner"
                     :lastmodified="doc.lastmodified" :image="doc.image">
+                    <div class="text-xs">{{ $t('lastModified') }}：{{ doc.lastmodified }}</div>
                 </DocCard>
             </div>
         </div>
@@ -31,6 +32,7 @@
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
                 <DocCard v-for="doc in mockDataOpened" :id="doc.id" :title="doc.title" :owner="doc.owner"
                     :lastmodified="doc.lastmodified" :image="doc.image">
+                    <div class="text-xs">{{ $t('lastOpened') }}：{{ doc.lastmodified }}</div>
                 </DocCard>
             </div>
         </div>
