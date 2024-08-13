@@ -36,5 +36,6 @@
     "userList1": "User List",
     "userList2": "There're no shared users.",
     "deleteWarn": "Access to the document are removed.",
-    "backToHomepage": "Back to Home Page"
+    "backToHomepage": "Back to Home Page",
+    "sure": "Are you sure to delete ?"
 }

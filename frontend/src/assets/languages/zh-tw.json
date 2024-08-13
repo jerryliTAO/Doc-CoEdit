@@ -36,5 +36,6 @@
     "userList1": "使用者名單",
     "userList2": "您尚未與他人共用",
     "deleteWarn": "您的共用權限被移除",
-    "backToHomepage": "返回首頁"
+    "backToHomepage": "返回首頁",
+    "sure": "確定要刪除文件嗎 ?"
 }

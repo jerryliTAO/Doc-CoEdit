@@ -23,6 +23,10 @@
                 <img src="@/images/userList.png" alt="" class="w-full h-full object:fill"
                     @click="useUserListStore().isShow = true">
             </button>
+            <button class="mr-3 w-8 h-8">
+                <img src="@/images/delete.png" alt="" class="w-full h-full object:fill"
+                    @click="useDeleteStore().isShow = true">
+            </button>
             <button class="mr-3 w-8 h-8" @click="exportPDF">
                 <img src="@/images/pdf1.png" alt="" class="w-full h-full object:fill">
             </button>
@@ -35,21 +39,23 @@
     </div>
     <OnlineList></OnlineList>
     <UserList></UserList>
-    <DeleteWarn></DeleteWarn>
+    <Delete></Delete>
+    <LostAccess></LostAccess>
 
 </template>
 
 
 <script lang='ts' setup>
+import { useDeleteStore } from '@/stores/delete';
 import { useUserListStore } from '@/stores/user';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import DeleteWarn from './DeleteWarn.vue';
+import Delete from './Delete.vue';
+import LostAccess from './LostAccess.vue';
 import OnlineList from './OnlineList.vue';
 import UserList from './UserList.vue';
-
 
 const editor = ref();
 let docTitle = ref('檔案名稱');
