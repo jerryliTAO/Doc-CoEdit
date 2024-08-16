@@ -15,8 +15,8 @@
                         <div class="font-semibold">{{ $t("photo_sticker") }}</div>
                         <div class="mt-3">
                             <div class="rounded-full w-32 h-32  border-2 flex">
-                                <img src="@/images/background.jpg" class="w-full h-full rounded-full object-cover"
-                                    alt="" ref="photoSticker">
+                                <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png"
+                                    class="w-full h-full rounded-full object-cover" alt="" ref="photoSticker">
                             </div>
                             <label for="image"
                                 class="mt-3 ml-4 rounded-sm w-24 h-9 flex justify-center items-center shadow-md border text-xs font-semibold">{{
@@ -72,7 +72,6 @@ let stickerEventListener = () => {
 const coverFrame = ref()
 const preview = ref()
 const coverUploader = ref()
-console.log(coverUploader)
 
 function handleFileSelect(e: Event) {
     e.stopPropagation();

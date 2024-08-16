@@ -4,7 +4,8 @@
     </div>
     <div class="flex flex-col items-center sm:justify-start sm:flex-row ">
         <div class="rounded-full w-48 h-48 -mt-24  border-2 flex sm:w-32 sm:h-32 sm:ml-10 sm:-mt-8">
-            <img src="@/images/background.jpg" class="w-full h-full rounded-full object-cover" alt="">
+            <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png"
+                class="w-full h-full rounded-full object-cover" alt="" ref="photoSticker">
         </div>
         <div class="mt-3 font-semibold text-2xl sm:ml-8">王曉明</div>
     </div>
