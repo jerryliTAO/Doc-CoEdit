@@ -30,7 +30,7 @@ export const singIn = async (email: string, password: string) => {
     );
 
     // user exist
-    if (user !== null) {
+    if (user) {
       // verify password
       const validatePassword = await bcrypt.compare(password, user.password);
       if (validatePassword) {
@@ -43,7 +43,7 @@ export const singIn = async (email: string, password: string) => {
         return "failed";
       }
     } else {
-      return;
+      return "failed";
     }
   } catch (error) {
     throw error;
