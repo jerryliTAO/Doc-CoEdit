@@ -43,7 +43,10 @@
 
 <script lang='ts' setup>
 import DocCard from '@/components/user/DocCard.vue';
-import { reactive } from 'vue';
+import axios from 'axios';
+import { onMounted, reactive } from 'vue';
+
+const API_URL = import.meta.env.VITE_APP_BASE_URL;
 
 //this is for testing
 let mockDataModified = reactive([
@@ -64,6 +67,17 @@ let mockDataOpened = reactive([
     { id: '45245342', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
     { id: '452148345584', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
 ])
+
+
+onMounted(async () => {
+
+    let result = await axios.post(API_URL + '/api/auth/singin', { email: 'test123@gmail.com', password: 'zx555c123' }).then((res) => {
+        return res.data
+    })
+    console.log(result)
+
+})
+
 
 </script>
 

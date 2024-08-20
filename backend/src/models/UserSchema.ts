@@ -1,31 +1,42 @@
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        maxLength: 128,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-        maxLength: 128
-    },
-    recentOpened: {
-        type: [{
-            _id: {
-                type: Schema.Types.ObjectId,
-                ref: 'Document'
-            },
-            lastOpened: Date
-        }],
-        default: []
-    }
-})
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    maxLength: 128,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    maxLength: 128,
+  },
+  recentOpened: {
+    type: [
+      {
+        _id: {
+          type: Schema.Types.ObjectId,
+          ref: "Document",
+        },
+        lastOpened: Date,
+      },
+    ],
+    default: [],
+  },
+  shared: {
+    type: [
+      {
+        _id: Schema.Types.ObjectId,
+        ref: "Document",
+      },
+    ],
+    default: [],
+  },
+});
 
-export const UserSchema = model('User', userSchema);
+export const UserSchema = model("User", userSchema);

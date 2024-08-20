@@ -7,7 +7,6 @@
                 <DocCard v-for="doc in mockData" :id="doc.id" :title="doc.title" :owner="doc.owner"
                     :lastmodified="doc.lastmodified" :image="doc.image">
                     <div class="text-xs">{{ $t('lastModified') }}：{{ doc.lastmodified }}</div>
-                    <div class="text-xs">{{ $t('lastOpened') }}：lastOpened</div>
                 </DocCard>
             </div>
         </div>
