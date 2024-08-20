@@ -32,7 +32,11 @@ export const singUp: RequestHandler = async (req, res) => {
       return res.status(200).send(user);
     }
   } catch (error) {
-    result = { status: "failed", msg: "There're some errors in server" };
+    console.log(error);
+    result = {
+      status: "failed",
+      msg: "There're some errors in server",
+    };
     return res.status(500).send(result);
   }
 };
@@ -60,6 +64,11 @@ export const singIn: RequestHandler = async (req, res) => {
       return res.status(200).send(result);
     }
   } catch (error) {
-    result = { status: "failed", msg: "There're some errors in server" };
+    console.log(error);
+    result = {
+      status: "failed",
+      msg: "There're some errors in server",
+    };
+    return res.status(500).send(result);
   }
 };

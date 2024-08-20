@@ -1,6 +1,7 @@
 <template>
     <div class="border-b-2 w-full bg-black">
-        <img src="@/images/meeting.png" class="object-none  w-full h-40" alt="">
+        <img src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            class="object-cover  w-full h-40" alt="">
     </div>
     <div class="flex flex-col items-center sm:justify-start sm:flex-row ">
         <div class="rounded-full w-48 h-48 -mt-24  border-2 flex sm:w-32 sm:h-32 sm:ml-10 sm:-mt-8">

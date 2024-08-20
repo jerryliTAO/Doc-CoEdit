@@ -1,11 +1,11 @@
 import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
-import mongoose from "mongoose";
 import { connectDB } from "./config/mongodb";
 import "./config/passport";
 import { authRouter } from "./routes/authRouter";
-import { createDoc } from "./Services/DocService";
+import { docRouter } from "./routes/docRouter";
+import { userRouter } from "./routes/userRouter";
 
 const dotenv = config();
 const app = express();
@@ -24,19 +24,10 @@ const corsOption = {
 };
 app.use(cors(corsOption));
 
-app.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid ID format");
-  }
-  const objId = new mongoose.Types.ObjectId(id);
-
-  const doc = await createDoc(objId);
-  console.log(doc);
-  res.send(doc);
-});
-
+//api router
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/doc", docRouter);
 
 app.listen(8080, () => {
   console.log("服務已經啟動");

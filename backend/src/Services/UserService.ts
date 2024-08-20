@@ -1,35 +1,45 @@
-import { connectDB } from "../config/mongodb";
+import mongoose from "mongoose";
+import { DocSchema } from "../models/DocSchema";
 import { UserSchema } from "../models/UserSchema";
 
-console.log("執行");
-connectDB();
-console.log("結束");
-
-const singUpUser = async (email: String, password: String, name: String) => {
+// get all user information
+export const getUserALLInfo = async (userId: string) => {
   try {
-    const newUser = await UserSchema.create({
-      email: email,
-      password: password,
-      name: name,
+    let findUser = await UserSchema.findById(
+      userId,
+      "-email -password"
+    ).populate({
+      path: "shared",
+      populate: { path: "owner", select: "name" },
     });
-    const allUsers = await UserSchema.find();
-    console.log(
-      allUsers.forEach((elem) => {
-        console.log(typeof elem._id);
-      })
-    );
-    // console.log(newUser)
-  } catch (error) {
-    console.log(error);
-  }
-  return "新增資料完成";
-};
 
-// const findAll = async ()=>{
-//     const user = await UserSchema.find();
-//     console.log(user);
-// }
-console.log("***************開始新增");
-const newUser = singUpUser("sdfsd@gmail.com", "zxc123", "TestAccount");
-console.log("***************新增結束");
-// findAll();
+    //get user docs
+    let findDoc: object = {};
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      findDoc = await DocSchema.find(
+        {
+          owner: new mongoose.Types.ObjectId(userId),
+        },
+        "-owner"
+      );
+      console.log(findDoc);
+    }
+
+    //set user information
+    if (findUser) {
+      let user = {
+        _id: findUser._id,
+        name: findUser.name,
+        photoSticker: findUser.photoSticker,
+        cover: findUser.cover,
+        shared: findUser.shared,
+        myDoc: findDoc,
+        recentOpened: findUser.recentOpened,
+      };
+
+      return user;
+    }
+  } catch (error) {
+    throw error;
+  }
+};

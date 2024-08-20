@@ -29,13 +29,17 @@ const userSchema = new Schema({
     default: [],
   },
   shared: {
-    type: [
-      {
-        _id: Schema.Types.ObjectId,
-        ref: "Document",
-      },
-    ],
+    type: [{ type: Schema.Types.ObjectId, ref: "Document", unique: true }],
     default: [],
+  },
+  photoSticker: {
+    type: String,
+    default: "https://cdn-icons-png.flaticon.com/128/149/149071.png",
+  },
+  cover: {
+    type: String,
+    default:
+      "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
 });
 
