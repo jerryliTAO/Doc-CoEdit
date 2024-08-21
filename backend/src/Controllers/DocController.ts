@@ -46,7 +46,7 @@ export const addAccess: RequestHandler = async (req, res) => {
       return res.status(200).send(result);
     }
     result.status = "failed";
-    result.msg = "Failed to share.";
+    result.msg = "User not found or User already been shared this doc.";
     return res.status(404).send(result);
   } catch (error) {
     console.log(error);
@@ -103,6 +103,34 @@ export const getMyShared: RequestHandler = async (req, res) => {
     result = {
       status: "failed",
       msg: "There're some errors in server",
+    };
+    return res.status(500).send(result);
+  }
+};
+
+export const deleteDocById: RequestHandler = async (req, res) => {
+  let result: responseStatus = {};
+  try {
+    const { docId } = req.body;
+    const deleteDocResult = await DocService.deleteDocById(docId);
+    if (deleteDocResult === 1) {
+      result = {
+        status: "success",
+        msg: "Successfully delete doc.",
+      };
+      return res.status(200).send(result);
+    }
+
+    result = {
+      status: "failed",
+      msg: "Document not found",
+    };
+    return res.status(404).send(result);
+  } catch (error) {
+    console.log(error);
+    result = {
+      status: "failed",
+      msg: "There're some errors in server.",
     };
     return res.status(500).send(result);
   }

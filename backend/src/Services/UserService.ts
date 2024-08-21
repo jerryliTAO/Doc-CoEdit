@@ -22,7 +22,6 @@ export const getUserALLInfo = async (userId: string) => {
         },
         "-owner"
       );
-      console.log(findDoc);
     }
 
     //set user information

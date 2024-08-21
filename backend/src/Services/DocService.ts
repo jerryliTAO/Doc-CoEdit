@@ -11,11 +11,14 @@ export const createDoc = async (_id: mongoose.Types.ObjectId) => {
   }
 };
 
-export const addAccessUser = async (_id: string, email: string) => {
+export const addAccessUser = async (docId: string, email: string) => {
   try {
     const user = await UserSchema.findOne({ email: email });
-    if (user) {
-      user.shared.push(new mongoose.Types.ObjectId(_id));
+    const objectId = new mongoose.Types.ObjectId(docId);
+
+    // make sure user exist and the shared doc not duplicate, then update
+    if (user && user.shared.indexOf(objectId) === -1) {
+      user.shared.push(objectId);
       await UserSchema.findOneAndUpdate(
         { email: email },
         { shared: user.shared },
@@ -50,6 +53,19 @@ export const getMyShared = async (userId: string) => {
       populate: { path: "owner", select: "name" },
     });
     return sharedDoc;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteDocById = async (docId: string) => {
+  try {
+    // check if doc exist
+    const doc = await DocSchema.findOneAndDelete({ _id: docId });
+    if (doc != null) {
+      return 1;
+    }
+    return 0;
   } catch (error) {
     throw error;
   }

@@ -29,6 +29,11 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/doc", docRouter);
 
+// visit not exist url to show 404
+app.use((req, res) => {
+  res.status(404).send("404 Can not find the page");
+});
+
 app.listen(8080, () => {
   console.log("服務已經啟動");
 });

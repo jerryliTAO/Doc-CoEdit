@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { UserSchema } from "./UserSchema";
 const docSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
@@ -22,4 +23,28 @@ const docSchema = new Schema({
     type: Date,
   },
 });
+
+// delete data in User.shared before doc been deleted
+docSchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const deleteId = this.getFilter()._id;
+
+    // delete use's shared doc which contains deleteId
+    await UserSchema.updateMany(
+      { shared: deleteId },
+      { $pull: { shared: deleteId } }
+    );
+
+    //delete use's recentOpened doc which contains deleteId
+    await UserSchema.updateMany(
+      { "recentOpened._id": deleteId },
+      { $pull: { "recentOpened._id": deleteId } }
+    );
+
+    next();
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const DocSchema = model("Document", docSchema);
