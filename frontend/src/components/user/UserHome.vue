@@ -71,12 +71,10 @@ let mockDataOpened = reactive([
 
 
 onMounted(async () => {
-
-    let result = await axios.post(API_URL + '/api/auth/singin', { email: 'test123@gmail.com', password: 'zx555c123' }).then((res) => {
+    let result = await axios.post(API_URL + '/api/auth/singin', { email: 'test123@gmail.com', password: 'zxc123' }).then((res) => {
         return res.data
     })
     console.log(result)
-
 })
 
 

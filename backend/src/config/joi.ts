@@ -14,7 +14,7 @@ export const singUpValidation = (data: object) => {
 
 export const singInValidation = (data: object) => {
   const schema = Joi.object({
-    email: Joi.string().required(),
+    email: Joi.string().required().email(),
     password: Joi.string().required(),
   });
   return schema.validate(data);

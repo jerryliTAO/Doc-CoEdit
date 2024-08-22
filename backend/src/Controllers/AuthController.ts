@@ -18,11 +18,7 @@ export const singUp: RequestHandler = async (req, res) => {
       return res.status(404).send(result);
     }
 
-    const user = await AuthService.singUp(
-      params.email,
-      params.password,
-      params.name
-    );
+    const user = await AuthService.singUp(params.email, params.password, params.name);
 
     if (user == "failed") {
       result = { status: "failed", msg: "This email already been used." };
@@ -57,10 +53,16 @@ export const singIn: RequestHandler = async (req, res) => {
 
     const user = await AuthService.singIn(params.email, params.password);
     if (user == "failed") {
-      result = { status: "failed", msg: "This email already been used." };
+      result = {
+        status: "failed",
+        msg: "This email not exist or password wrong.",
+      };
       return res.status(400).send(result);
     } else {
-      result = { status: "success", data: { token: user } };
+      result = {
+        status: "success",
+        data: { token: user },
+      };
       return res.status(200).send(result);
     }
   } catch (error) {

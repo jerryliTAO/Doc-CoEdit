@@ -4,11 +4,12 @@
             <div class="font-black md:text-4xl ">{{
                 $t('login') }}
             </div>
-            <input type="text" class=" loginItem pl-3 bg-gray-700 opacity-80 w-36 md:w-auto"
-                :placeholder="$t('email')"></input>
+            <div class="text-red-700 font-semibold">{{ errorMsg }}</div>
+            <input type="text" class=" loginItem pl-3 bg-gray-700 opacity-80 w-36 md:w-auto" :placeholder="$t('email')"
+                ref="emailElement"></input>
             <input type="password" class=" loginItem pl-3 bg-gray-700 opacity-80 w-36 md:w-auto"
-                :placeholder="$t('password')"></input>
-            <button class=" loginItem bg-lime-500 cursor-pointer hover:bg-lime-600">{{
+                :placeholder="$t('password')" ref="passwordElement"></input>
+            <button class=" loginItem bg-lime-500 cursor-pointer hover:bg-lime-600" @click="login">{{
                 $t("login") }}</button>
             <slot></slot>
         </div>
@@ -17,6 +18,30 @@
 
 
 <script lang='ts' setup>
+import router from '@/router';
+import axios from 'axios';
+import { ref } from 'vue';
+
+let errorMsg = ref('')
+let isShow = ref(false)
+let emailElement = ref();
+let passwordElement = ref();
+let API_URL = import.meta.env.VITE_APP_BASE_URL
+
+const login = async () => {
+    let email = emailElement.value.value;
+    let password = passwordElement.value.value;
+    let loginResult = await axios.post(API_URL + '/api/auth/singin', { email: email, password: password }).then((res) => {
+        return res.data
+    }).catch((error) => {
+        errorMsg.value = error.response.data.msg;
+        isShow.value = true;
+    })
+    if (loginResult.status === "success") {
+        router.push('/user')
+    }
+}
+
 
 </script>
 
