@@ -5,10 +5,7 @@ import { UserSchema } from "../models/UserSchema";
 // get all user information
 export const getUserALLInfo = async (userId: string) => {
   try {
-    let findUser = await UserSchema.findById(
-      userId,
-      "-email -password"
-    ).populate({
+    let findUser = await UserSchema.findById(userId, "-email -password").populate({
       path: "shared",
       populate: { path: "owner", select: "name" },
     });
@@ -41,4 +38,15 @@ export const getUserALLInfo = async (userId: string) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const getUserProfile = async (userId: string) => {
+  const userProfile = await UserSchema.findById(userId, "name photoSticker cover -_id");
+  console.log(userProfile);
+  return userProfile;
+};
+
+export const updateUserProfile = async (userId: string, updateData: userProfileUpdateData) => {
+  const result = await UserSchema.findOneAndUpdate({ _id: userId }, updateData);
+  return result;
 };
