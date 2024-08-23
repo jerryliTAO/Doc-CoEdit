@@ -78,6 +78,7 @@ const getMyProfile = async (userId: string) => {
         console.log(error)
         return {}
     })
+    useLoadingStore().isShow = false
     return result
 }
 
@@ -230,10 +231,6 @@ onMounted(async () => {
     } else {
         alert(result.msg)
     }
-    setTimeout(() => {
-        useLoadingStore().isShow = false
-    }, 500)
-
 })
 
 </script>

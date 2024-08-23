@@ -6,7 +6,11 @@
                     $t('changeCover') }}</label>
             <input type="file" name="cover" :id="id" class="hidden" ref="modifiedCover">
         </div>
-        <RouterLink :to="{ path: '/' }">
+        <RouterLink :to="{
+            name: 'editor', params: {
+                docId: id
+            }
+        }">
             <div class="w-full h-48 p-2">
                 <img :src="image" class="w-full h-full object-cover" alt="" ref="displayCover">
             </div>

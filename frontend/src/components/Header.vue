@@ -78,7 +78,6 @@ const logout = () => {
 }
 
 onMounted(() => {
-    console.log(token.value)
     setLanguage(i18n, locale)
     language_option.value.value = i18n.locale.value
 

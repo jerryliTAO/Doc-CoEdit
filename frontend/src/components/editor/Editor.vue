@@ -44,6 +44,9 @@
 
 </template>
 
+<script lang="ts">
+Quill.register("modules/resize", QuillResizeImage)
+</script>
 
 <script lang='ts' setup>
 import { useDeleteStore } from '@/stores/delete';
@@ -64,8 +67,8 @@ let exportPDF = () => {
     window.print();
 }
 
+
 onMounted(() => {
-    Quill.register("modules/resize", QuillResizeImage)
     const quill = new Quill(editor.value, {
         theme: 'snow',
         modules: {
@@ -90,9 +93,6 @@ onMounted(() => {
         }
     })
 })
-
-
-
 
 </script>
 

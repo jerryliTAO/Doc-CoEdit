@@ -52,7 +52,7 @@ const router = createRouter({
       ],
     },
     {
-      path: "/editor",
+      path: "/editor/:docId",
       name: "editor",
       component: Editor,
     },

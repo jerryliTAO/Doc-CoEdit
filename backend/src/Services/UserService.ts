@@ -42,7 +42,6 @@ export const getUserALLInfo = async (userId: string) => {
 
 export const getUserProfile = async (userId: string) => {
   const userProfile = await UserSchema.findById(userId, "name photoSticker cover -_id");
-  console.log(userProfile);
   return userProfile;
 };
 

@@ -1,5 +1,5 @@
 <template>
-    <div className="fixed left-0 right-0 top-0 bottom-0 bg-black bg-opacity-20 flex items-center">
+    <div className="fixed left-0 right-0 top-0 bottom-0 bg-black bg-opacity-80 flex items-center">
         <div id="fountainTextG" class="flex justify-center items-center">
             <div class="cssload-bell">
                 <div class="cssload-circle">
