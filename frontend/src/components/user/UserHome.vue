@@ -44,9 +44,11 @@
 <script lang='ts' setup>
 import DocCard from '@/components/user/DocCard.vue';
 import { useLoadingStore } from '@/stores/loading';
-import axios from 'axios';
+import axios from '@/utils/axios';
+import { unauthenticate } from '@/utils/unauthenticate';
 import { onMounted, reactive } from 'vue';
-
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 const API_URL = import.meta.env.VITE_APP_BASE_URL;
 let userId = localStorage.getItem("userId") || ''
 let userAllInfo: userAllInfo = reactive({})
@@ -64,11 +66,12 @@ const getUserAllInfo = async (userId: string) => {
 }
 
 
-
 onMounted(async () => {
     let result = await getUserAllInfo(userId)
     if (result.status === "success") {
         Object.assign(userAllInfo, result.data)
+    } else if (result.status === "token failed") {
+        unauthenticate(result, t);
     } else {
         alert(result.msg)
     }

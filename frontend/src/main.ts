@@ -15,12 +15,3 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
-
-// Let page at the top of itself after jumping
-router.beforeEach((to, from, next) => {
-  window.scrollTo(0, 0);
-  next();
-});
-router.afterEach((to, from, next) => {
-  window.scrollTo(0, 0);
-});

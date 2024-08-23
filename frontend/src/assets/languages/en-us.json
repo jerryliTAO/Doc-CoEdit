@@ -44,5 +44,6 @@
     "title": "Title",
     "owner": "Owner",
     "lastModified": "LastModified",
-    "lastOpened": "LastOpened"
+    "lastOpened": "LastOpened",
+    "singInExpired": "Sing in expired."
 }

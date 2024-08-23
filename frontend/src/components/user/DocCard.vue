@@ -26,7 +26,8 @@
 
 <script lang='ts' setup>
 import { coverEventListener } from '@/hooks/useChangeCover';
-import axios from 'axios';
+import axios from '@/utils/axios';
+import { unauthenticate } from '@/utils/unauthenticate';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { RouterLink } from 'vue-router';
@@ -39,7 +40,7 @@ let watchImage = ref('');
 const props = defineProps(['id', 'title', 'owner', 'lastmodified', 'image'])
 
 onMounted(() => {
-    coverEventListener(modifiedCover.value, displayCover.value, watchImage);
+    coverEventListener(modifiedCover.value, displayCover.value, watchImage, t);
     // monitor if modified cover
     watch(watchImage, async (newValue) => {
         //to update the cover data into DB
@@ -49,6 +50,10 @@ onMounted(() => {
             alert(error.response.data.msg)
             return {}
         })
+
+        if (result.status === "token failed") {
+            unauthenticate(result, t);
+        }
 
 
     })

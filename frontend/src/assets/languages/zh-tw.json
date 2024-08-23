@@ -44,5 +44,6 @@
     "title": "標　　題",
     "owner": "作　　者",
     "lastModified": "最後修改",
-    "lastOpened": "最後開啟"
+    "lastOpened": "最後開啟",
+    "singInExpired": "登入過期"
 }

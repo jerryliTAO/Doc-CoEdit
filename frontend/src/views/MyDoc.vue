@@ -17,8 +17,10 @@
 <script lang='ts' setup>
 import DocCard from '@/components/user/DocCard.vue';
 import { useLoadingStore } from '@/stores/loading';
-import axios from 'axios';
+import axios from '@/utils/axios';
+import { unauthenticate } from '@/utils/unauthenticate';
 import { onMounted, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 let mockData = reactive([
     { id: '123', title: '1', owner: 'jerry', lastmodified: '123-1561', image: '/src/images/meeting.png' },
@@ -28,6 +30,7 @@ let mockData = reactive([
     { id: '1012', title: '5', owner: 'jerry444', lastmodified: '123-1561', image: '/src/images/meeting.png' },
 ])
 
+const { t } = useI18n();
 const API_URL = import.meta.env.VITE_APP_BASE_URL;
 let userId = localStorage.getItem("userId") || ''
 let myDoc: Array<doc> = reactive([])
@@ -50,6 +53,8 @@ onMounted(async () => {
     let result = await getMyDoc(userId)
     if (result.status === "success") {
         Object.assign(myDoc, result.data)
+    } else if (result.status === "token failed") {
+        unauthenticate(result, t);
     } else {
         alert(result.msg)
     }

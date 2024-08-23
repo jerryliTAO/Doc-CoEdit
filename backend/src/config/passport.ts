@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import { RequestHandler } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import passport from "passport";
 import { ExtractJwt, Strategy, StrategyOptions } from "passport-jwt";
@@ -12,7 +13,7 @@ let opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: secretOrKey,
 };
-export const JwtPassport = passport.use(
+const JwtStrategy = passport.use(
   new Strategy(opts, async (jwt_payload: JwtPayload, done: Function) => {
     try {
       const user = UserSchema.findOne({ id: jwt_payload._id });
@@ -26,3 +27,15 @@ export const JwtPassport = passport.use(
     }
   })
 );
+
+export const JwtPassport: RequestHandler = (req, res, next) => {
+  JwtStrategy.authenticate("jwt", { session: false }, function (err: any, user: Express.User | false | null) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(200).send({ status: "token failed", msg: "token failed" });
+    }
+    next();
+  })(req, res, next);
+};

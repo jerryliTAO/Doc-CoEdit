@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import express from "express";
 import { connectDB } from "./config/mongodb";
 import "./config/passport";
+import { JwtPassport } from "./config/passport";
 import { authRouter } from "./routes/authRouter";
 import { docRouter } from "./routes/docRouter";
 import { userRouter } from "./routes/userRouter";
@@ -27,8 +28,8 @@ app.use(cors(corsOption));
 
 //api router
 app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
-app.use("/api/doc", docRouter);
+app.use("/api/user", JwtPassport, userRouter);
+app.use("/api/doc", JwtPassport, docRouter);
 
 // visit not exist url to show 404
 app.use((req, res) => {

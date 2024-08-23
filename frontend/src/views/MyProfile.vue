@@ -57,7 +57,8 @@
 <script lang='ts' setup>
 import router from '@/router';
 import { useLoadingStore } from '@/stores/loading';
-import axios from 'axios';
+import axios from '@/utils/axios';
+import { unauthenticate } from '@/utils/unauthenticate';
 import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
@@ -113,20 +114,6 @@ const updateProfile = async () => {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // =========== photo sticker  ============
@@ -228,6 +215,8 @@ onMounted(async () => {
     let result = await getMyProfile(userId)
     if (result.status === "success") {
         Object.assign(myProfile, result.data)
+    } else if (result.status === "token failed") {
+        unauthenticate(result, t);
     } else {
         alert(result.msg)
     }
