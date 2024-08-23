@@ -29,7 +29,7 @@ const userSchema = new Schema({
     default: [],
   },
   shared: {
-    type: [{ type: Schema.Types.ObjectId, ref: "Document", unique: true }],
+    type: [{ type: Schema.Types.ObjectId, ref: "Document" }],
     default: [],
   },
   photoSticker: {
@@ -38,8 +38,7 @@ const userSchema = new Schema({
   },
   cover: {
     type: String,
-    default:
-      "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    default: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
 });
 

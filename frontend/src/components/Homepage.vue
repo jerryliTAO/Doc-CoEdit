@@ -1,7 +1,5 @@
 <template>
-
     <Header />
-
     <div class="w-full flex flex-col items-center mt-5" ref="container">
         <div class="w-10/12 mb-10 flex justify-center items-center" ref="describeItem">
             <div class="flex flex-col items-center m-3">
@@ -94,18 +92,19 @@
 
 
 <script lang='ts' setup>
+import router from '@/router';
 import { ref } from 'vue';
-
-import 'vue-loading-overlay/dist/css/index.css';
 import Header from './Header.vue';
-
 import Login from './Login.vue';
 import SignUp from './SignUp.vue';
 
-
-let isLoading = ref(false)
 let isShow = ref(true)
 
+// if user already login, redirect to /user
+let token = localStorage.getItem("token");
+if (token !== null) {
+    router.push('/user')
+}
 
 
 

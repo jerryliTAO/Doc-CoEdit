@@ -4,11 +4,11 @@
             <div class="font-black md:text-4xl ">{{
                 $t('login') }}
             </div>
-            <div class="text-red-700 font-semibold">{{ errorMsg }}</div>
+            <div class="text-red-700 font-semibold" v-show="isShow">{{ errorMsg }}</div>
             <input type="text" class=" loginItem pl-3 bg-gray-700 opacity-80 w-36 md:w-auto" :placeholder="$t('email')"
-                ref="emailElement"></input>
+                ref="emailElement" @keydown.enter="login"></input>
             <input type="password" class=" loginItem pl-3 bg-gray-700 opacity-80 w-36 md:w-auto"
-                :placeholder="$t('password')" ref="passwordElement"></input>
+                :placeholder="$t('password')" ref="passwordElement" @keydown.enter="login"></input>
             <button class=" loginItem bg-lime-500 cursor-pointer hover:bg-lime-600" @click="login">{{
                 $t("login") }}</button>
             <slot></slot>
@@ -38,6 +38,9 @@ const login = async () => {
         isShow.value = true;
     })
     if (loginResult.status === "success") {
+        localStorage.setItem("token", loginResult.data.token)
+        localStorage.setItem("userId", loginResult.data.userId)
+
         router.push('/user')
     }
 }

@@ -64,7 +64,6 @@ export const getMyDoc: RequestHandler = async (req, res) => {
   try {
     const { userId } = req.params;
     const myDoc = await DocService.getMyDoc(userId);
-    console.log(myDoc);
     result = {
       status: "success",
       data: myDoc,
@@ -108,6 +107,7 @@ export const getMyShared: RequestHandler = async (req, res) => {
   }
 };
 
+// delete document
 export const deleteDocById: RequestHandler = async (req, res) => {
   let result: responseStatus = {};
   try {
@@ -124,6 +124,35 @@ export const deleteDocById: RequestHandler = async (req, res) => {
     result = {
       status: "failed",
       msg: "Document not found",
+    };
+    return res.status(404).send(result);
+  } catch (error) {
+    console.log(error);
+    result = {
+      status: "failed",
+      msg: "There're some errors in server.",
+    };
+    return res.status(500).send(result);
+  }
+};
+
+//update document cover
+export const updateDocCover: RequestHandler = async (req, res) => {
+  let result: responseStatus = {};
+  try {
+    const { docId, cover } = req.body;
+    const updateResult = await DocService.updateDocCover(docId, cover);
+    if (updateResult === 1) {
+      result = {
+        status: "success",
+        msg: "Successfully update cover.",
+      };
+      return res.status(200).send(result);
+    }
+
+    result = {
+      status: "failed",
+      msg: "Fail to update cover.",
     };
     return res.status(404).send(result);
   } catch (error) {

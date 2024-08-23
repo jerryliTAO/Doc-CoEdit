@@ -19,11 +19,7 @@ export const addAccessUser = async (docId: string, email: string) => {
     // make sure user exist and the shared doc not duplicate, then update
     if (user && user.shared.indexOf(objectId) === -1) {
       user.shared.push(objectId);
-      await UserSchema.findOneAndUpdate(
-        { email: email },
-        { shared: user.shared },
-        { runValidators: true }
-      );
+      await UserSchema.findOneAndUpdate({ email: email }, { shared: user.shared }, { runValidators: true });
       return "success";
     }
     return "failed";
@@ -52,7 +48,7 @@ export const getMyShared = async (userId: string) => {
       path: "shared",
       populate: { path: "owner", select: "name" },
     });
-    return sharedDoc;
+    return sharedDoc?.shared;
   } catch (error) {
     throw error;
   }
@@ -62,7 +58,19 @@ export const deleteDocById = async (docId: string) => {
   try {
     // check if doc exist
     const doc = await DocSchema.findOneAndDelete({ _id: docId });
-    if (doc != null) {
+    if (doc !== null) {
+      return 1;
+    }
+    return 0;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateDocCover = async (id: string, cover: string) => {
+  try {
+    const result = await DocSchema.findOneAndUpdate({ _id: id }, { cover: cover });
+    if (result !== null) {
       return 1;
     }
     return 0;

@@ -9,14 +9,15 @@
                 <div class="w-1/2" ref="left">
                     <div class="mt-10">
                         <div class="font-semibold">{{ $t("name") }}</div>
-                        <input type="text" name="name" value="123" id="name" class="border text-gray-500">
+                        <input type="text" name="name" :value="myProfile.name" id="name" class="border text-gray-500"
+                            ref="nameElement">
                     </div>
                     <div class="mt-10">
                         <div class="font-semibold">{{ $t("photo_sticker") }}</div>
                         <div class="mt-3">
                             <div class="rounded-full w-32 h-32  border-2 flex">
-                                <img src="https://cdn-icons-png.flaticon.com/128/149/149071.png"
-                                    class="w-full h-full rounded-full object-cover" alt="" ref="photoSticker">
+                                <img :src="myProfile.photoSticker" class="w-full h-full rounded-full object-cover"
+                                    alt="" ref="photoStickerElement">
                             </div>
                             <label for="image"
                                 class="mt-3 ml-4 rounded-sm w-24 h-9 flex justify-center items-center shadow-md border text-xs font-semibold">{{
@@ -31,7 +32,7 @@
                     <div class="mt-10">
                         <div class="font-semibold">{{ $t("cover") }}</div>
                     </div>
-                    <input type="file" id="coverUploader" class="hidden" accept="image/gif,image/jpg,image/png"
+                    <input type="file" id="coverUploader" class="hidden" accept="image/gif,image/jpeg,image/png"
                         ref="coverUploader" />
                     <div class="w-60 h-72 border sm:w-60 md:w-80 hover:cursor-pointer" ref="coverFrame">
                         <div id="preview" class="w-full h-full flex flex-col justify-center items-center" ref="preview">
@@ -44,7 +45,8 @@
             </div>
             <div class="flex justify-end mt-10 mb-5">
                 <button for="image"
-                    class="mt-3 ml-4 rounded-sm w-24 h-9 flex justify-center items-center shadow-md bg-gray-300 border font-semibold">{{
+                    class="mt-3 ml-4 rounded-sm w-24 h-9 flex justify-center items-center shadow-md bg-gray-300 border font-semibold"
+                    @click="updateProfile">{{
                         $t("save") }}</button>
             </div>
         </div>
@@ -53,18 +55,83 @@
 
 
 <script lang='ts' setup>
-import { onMounted, ref } from 'vue';
+import router from '@/router';
+import { useLoadingStore } from '@/stores/loading';
+import axios from 'axios';
+import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
+const stickerUploader = ref();
+const nameElement = ref();
+const photoStickerElement = ref();
+
+
+const API_URL = import.meta.env.VITE_APP_BASE_URL;
+let userId = localStorage.getItem("userId") || ''
+let myProfile: userAllInfo = reactive({})
+
+const getMyProfile = async (userId: string) => {
+    useLoadingStore().isShow = true
+    let result = await axios.get(API_URL + "/api/user/profile/" + userId).then((res) => {
+        return res.data
+    }).catch(error => {
+        console.log(error)
+        return {}
+    })
+    return result
+}
+
+const updateProfile = async () => {
+    useLoadingStore().isShow = true
+    let data = {};
+    const coverElement = document.getElementById("coverElement");
+    if (coverElement !== null) {
+        data = {
+            name: nameElement.value.value,
+            photoSticker: photoStickerElement.value.src,
+            cover: coverElement.src
+        }
+    } else {
+        data = {
+            name: nameElement.value.value,
+            photoSticker: photoStickerElement.value.src,
+        }
+    }
+    let result = await axios.patch(API_URL + '/api/user/profile/' + userId, data).then((res) => {
+        return res.data
+    }).catch((error) => {
+        console.log(error);
+        return {}
+    })
+    useLoadingStore().isShow = false
+    if (result.status === 'success') {
+        router.push('/user')
+    } else {
+        alert("Update failed")
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 // =========== photo sticker  ============
-const stickerUploader = ref()
-const photoSticker = ref()
 let stickerEventListener = () => {
     stickerUploader.value.addEventListener("change", (e: Event) => {
-        handleFiles(e.target.files, stickerUploader.value, photoSticker.value)
+        handleFiles(e.target.files, stickerUploader.value, photoStickerElement.value)
     })
 }
 
@@ -100,6 +167,7 @@ function dragover(e: Event) {
 function handleFiles(files: FileList, inputElement: HTMLInputElement, displayElement: HTMLElement | HTMLImageElement) {
     for (var i = 0; i < files.length; i++) {
         const file = files[i];
+        // verify if file is .png/.jpeg/.gif
         const imageType = /^image\/(png|jpeg|gif)$/;
 
         if (!file.type.match(imageType)) {
@@ -115,6 +183,7 @@ function handleFiles(files: FileList, inputElement: HTMLInputElement, displayEle
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.objectFit = 'cover';
+            img.id = "coverElement"
 
             img.file = file;
             displayElement.innerText = '';
@@ -151,11 +220,22 @@ let coverEventListener = () => {
 
 
 
-onMounted(() => {
+onMounted(async () => {
     stickerEventListener();
     coverEventListener();
 
+    let result = await getMyProfile(userId)
+    if (result.status === "success") {
+        Object.assign(myProfile, result.data)
+    } else {
+        alert(result.msg)
+    }
+    setTimeout(() => {
+        useLoadingStore().isShow = false
+    }, 500)
+
 })
+
 </script>
 
 

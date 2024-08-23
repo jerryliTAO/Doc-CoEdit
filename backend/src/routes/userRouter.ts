@@ -6,4 +6,4 @@ export const userRouter = Router();
 userRouter.get("/:userId", UserController.getUserInformation);
 userRouter.get("/profile/:userId", UserController.getUserProfile);
 
-userRouter.post("/profile/:userId", UserController.updateUserProfile);
+userRouter.patch("/profile/:userId", UserController.updateUserProfile);

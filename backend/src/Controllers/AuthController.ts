@@ -25,7 +25,7 @@ export const singUp: RequestHandler = async (req, res) => {
       return res.status(400).send(result);
     } else {
       result = { status: "success", data: user };
-      return res.status(200).send(user);
+      return res.status(200).send(result);
     }
   } catch (error) {
     console.log(error);
@@ -61,7 +61,7 @@ export const singIn: RequestHandler = async (req, res) => {
     } else {
       result = {
         status: "success",
-        data: { token: user },
+        data: user,
       };
       return res.status(200).send(result);
     }

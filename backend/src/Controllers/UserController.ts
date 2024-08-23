@@ -12,7 +12,7 @@ export const getUserInformation: RequestHandler = async (req, res) => {
         status: "success",
         data: user,
       };
-      return res.status(200).send(user);
+      return res.status(200).send(result);
     }
 
     result = {

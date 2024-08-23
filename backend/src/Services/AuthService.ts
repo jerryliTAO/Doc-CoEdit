@@ -19,7 +19,13 @@ export const singUp = async (email: string, password: string, name: string) => {
     password: bcryptPassword,
     name: name,
   });
-  return newUser;
+
+  // sign up success and create a token
+  let token = jwt.sign({ _id: newUser._id, name: newUser.name }, secretOrKey, {
+    expiresIn: "30s",
+  });
+  token = "bearer " + token;
+  return { userId: newUser._id, token: token };
 };
 
 export const singIn = async (email: string, password: string) => {
@@ -36,7 +42,7 @@ export const singIn = async (email: string, password: string) => {
           expiresIn: "30s",
         });
         token = "bearer " + token;
-        return token;
+        return { userId: user._id, token: token };
       } else {
         return "failed";
       }
