@@ -45,5 +45,7 @@
     "owner": "作　　者",
     "lastModified": "最後修改",
     "lastOpened": "最後開啟",
-    "singInExpired": "登入過期"
+    "singInExpired": "登入過期",
+    "join": "加入編輯",
+    "leave": "已離開"
 }

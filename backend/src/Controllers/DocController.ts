@@ -41,13 +41,24 @@ export const addAccess: RequestHandler = async (req, res) => {
     const addResult = await DocService.addAccessUser(data._id, data.email);
 
     if (addResult === "success") {
-      result.status = "success";
-      result.msg = "Share to other success.";
+      result = {
+        status: "success",
+        msg: "Share to other success.",
+      };
       return res.status(200).send(result);
+    } else if (addResult === "failed_Can't share to yourself.") {
+      result = {
+        status: "failed",
+        msg: "Can't share to yourself.",
+      };
+      return res.status(404).send(result);
+    } else {
+      result = {
+        status: "failed",
+        msg: "User not found or User already been shared this doc.",
+      };
+      return res.status(404).send(result);
     }
-    result.status = "failed";
-    result.msg = "User not found or User already been shared this doc.";
-    return res.status(404).send(result);
   } catch (error) {
     console.log(error);
     result = {

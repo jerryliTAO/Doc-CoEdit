@@ -106,7 +106,9 @@ if (token !== null) {
     router.push('/user')
 }
 
-
+import moment from 'moment';
+console.log(moment().format())
+console.log(moment().format("YYYY-MM-DD HH:mm:ss"))
 
 </script>
 

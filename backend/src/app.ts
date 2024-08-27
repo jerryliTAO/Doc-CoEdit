@@ -7,6 +7,7 @@ import { JwtPassport } from "./config/passport";
 import { authRouter } from "./routes/authRouter";
 import { docRouter } from "./routes/docRouter";
 import { userRouter } from "./routes/userRouter";
+import { socketServer } from "./server";
 
 const dotenv = config();
 const app = express();
@@ -39,3 +40,5 @@ app.use((req, res) => {
 app.listen(8080, () => {
   console.log("服務已經啟動");
 });
+
+socketServer();

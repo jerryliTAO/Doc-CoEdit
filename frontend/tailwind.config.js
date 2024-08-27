@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{html,js,ts,vue}"],
   theme: {
     extend: {
+      spacing: {
+        "2/5": "40%"
+      },
       screens: {
         tablet: '900px'
       },

@@ -1,4 +1,4 @@
-import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 
 const instance = axios.create({
   timeout: 10000,
@@ -9,6 +9,8 @@ instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // set some config before request
     const token = localStorage.getItem("token");
+
+    // setting Authorization in Headers for every request
     if (token) {
       config.headers.Authorization = `${token}`;
     }
@@ -26,11 +28,11 @@ instance.interceptors.response.use(
     // response data
     return response;
   },
-  (error: AxiosError) => {
+  (error) => {
     // response error
     if (error.response) {
-      // 根據錯誤狀態碼顯示相應的錯誤信息
-      console.error(`Error ${error.response.status}: ${error.response.data.message}`);
+      // according the error status to show error message
+      console.error(`Error ${error.response.status}: ${error.response.data.msg}`);
     } else {
       console.error("Network Error");
     }

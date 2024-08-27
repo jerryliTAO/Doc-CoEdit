@@ -2,10 +2,10 @@ import Editor from "@/components/editor/Editor.vue";
 import NotFound from "@/components/error/NotFound.vue";
 import HomePage from "@/components/Homepage.vue";
 import User from "@/components/user/User.vue";
-import UserHome from "@/components/user/UserHome.vue";
 import CreateDoc from "@/views/CreateDoc.vue";
 import MyDoc from "@/views/MyDoc.vue";
 import MyProfile from "@/views/MyProfile.vue";
+import UserHome from "@/views/UserHome.vue";
 
 import Shared from "@/views/Shared.vue";
 import { createRouter, createWebHistory } from "vue-router";

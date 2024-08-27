@@ -45,5 +45,7 @@
     "owner": "Owner",
     "lastModified": "LastModified",
     "lastOpened": "LastOpened",
-    "singInExpired": "Sing in expired."
+    "singInExpired": "Sing in expired.",
+    "join": "join to edit.",
+    "leave": "leave."
 }
