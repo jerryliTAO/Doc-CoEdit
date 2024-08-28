@@ -62,9 +62,9 @@
         <div id="editor" ref="editor"></div>
     </div>
     <OnlineList :onlineList="usersInfo.onlineList" :docOwner="doc.owner"></OnlineList>
-    <UserList :userList="usersInfo.userList"></UserList>
+    <UserList :userList="usersInfo.userList" :docId="docId" :socket="socket"></UserList>
     <Delete></Delete>
-    <LostAccess></LostAccess>
+    <LostAccess :isLostAccess="isLostAccess"></LostAccess>
 
 </template>
 
@@ -94,6 +94,7 @@ let newUserName = ref('');
 let leaveUserName = ref('');
 let isUserIn = ref(false)
 let isUserOut = ref(false)
+let isLostAccess = ref(false)
 let timerElement1 = ref();
 let timerElement2 = ref();
 
@@ -106,7 +107,7 @@ let doc = reactive({
     },
     title: ""
 });
-let usersInfo = reactive({
+let usersInfo = reactive<usersInfo>({
     onlineList: [],
     userList: []
 });
@@ -134,15 +135,12 @@ const timerInterval = (element: HTMLElement) => {
             clearInterval(timer);
         }
     }
-
     //set timer
     const timer = setInterval(updateProgressBar, interval);
 };
 
 const socket = io(SOCKET_URL);
-onMounted(async () => {
-
-
+onMounted(() => {
     socket.emit("join", { userId: userId, docId: docId })
 
     // for not exist doc
@@ -160,14 +158,37 @@ onMounted(async () => {
         newUserName.value = newUser;
         usersInfo.onlineList = newOnlineList;
 
-        if (newUser == "") {
-
+        //  inform to all online user except this new user
+        if (usersInfo.onlineList.find((item) => item?._id === userId)?.name !== newUser) {
+            isUserIn.value = true;
+            timerInterval(timerElement1.value)
+            setTimeout(() => {
+                isUserIn.value = false;
+            }, 2000)
         }
-        isUserIn.value = true;
-        timerInterval(timerElement1.value)
+
+    })
+
+    socket.on("delete-user", (data) => {
+        const { deleteId, deleteName } = data;
+
+        Object.assign(usersInfo, data.usersInfo)
+        // if user is deleted user
+        if (deleteId === userId) {
+            quill.disable();
+            socket.disconnect();
+            isLostAccess.value = true;
+            return;
+        }
+
+        //
+        leaveUserName.value = deleteName;
+        isUserOut.value = true;
+        timerInterval(timerElement2.value)
         setTimeout(() => {
-            isUserIn.value = false;
+            isUserOut.value = false;
         }, 2000)
+
     })
 
     socket.on("user-leave", (data) => {
@@ -182,9 +203,6 @@ onMounted(async () => {
         }, 2000)
 
     })
-
-    // console.log(usersInfo.userList)
-
 
 
 
@@ -214,7 +232,6 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-
     // leave the doc and disconnect the socket
     socket.emit('leave', { userId: userId, docId: docId });
     socket.disconnect();

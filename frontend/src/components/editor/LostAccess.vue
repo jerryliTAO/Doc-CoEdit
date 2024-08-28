@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isWarn">
+    <div v-if="isLostAccess">
         <div class="fixed top-0 left-0 flex justify-center items-center w-lvw h-lvh bg-black opacity-40"></div>
         <div class="fixed top-0 left-0 flex justify-center items-center w-lvw h-lvh">
             <div class=" h-60 bg-gray-800 flex flex-col items-center rounded-2xl overflow-auto" ref="deleteWarm">
@@ -19,9 +19,9 @@
 <script lang='ts' setup>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
-
+defineProps(["isLostAccess"])
 let deleteWarm = ref();
-let isWarn = ref(false);
+
 
 
 </script>
