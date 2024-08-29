@@ -17,8 +17,8 @@
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
                 <DocCard v-for="doc in userAllInfo.shared" :id="doc._id" :title="doc.title" :owner="doc.owner.name"
-                    :lastmodified="doc.lastmodified" :image="doc.cover" :key="doc._id">
-                    <div class="text-xs">{{ $t('lastModified') }}：{{ doc.lastmodified }}</div>
+                    :lastmodified="doc.lastModified" :image="doc.cover" :key="doc._id">
+                    <div class="text-xs">{{ $t('lastModified') }}：{{ doc.lastModified }}</div>
                 </DocCard>
             </div>
         </div>

@@ -17,8 +17,9 @@
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
                 <DocCard v-for="doc in userAllInfo.shared" :id="doc._id" :title="doc.title" :owner="doc.owner.name"
-                    :lastmodified="doc.lastmodified" :image="doc.cover" :key="doc._id">
-                    <div class="text-xs">{{ $t('lastModified') }}：{{ doc.lastmodified }}</div>
+                    :lastmodified="doc.lastModified" :image="doc.cover" :key="doc._id">
+                    <div class="text-xs">{{ $t('lastModified') }}：{{
+                        moment(doc.lastModified).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
                 </DocCard>
             </div>
         </div>
@@ -33,7 +34,8 @@
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
                 <DocCard v-for="doc in mockDataOpened" :id="doc.id" :title="doc.title" :owner="doc.owner"
                     :lastmodified="doc.lastmodified" :image="doc.image">
-                    <div class="text-xs">{{ $t('lastOpened') }}：{{ doc.lastmodified }}</div>
+                    <div class="text-xs">{{ $t('lastOpened') }}：{{
+                        moment(doc.lastmodified).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
                 </DocCard>
             </div>
         </div>
@@ -46,6 +48,7 @@ import DocCard from '@/components/user/DocCard.vue';
 import { useLoadingStore } from '@/stores/loading';
 import axios from '@/utils/axios';
 import { unauthenticate } from '@/utils/unauthenticate';
+import moment from 'moment';
 import { onMounted, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n();

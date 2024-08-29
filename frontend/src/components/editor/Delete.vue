@@ -13,7 +13,8 @@
                         }}</div>
                     <div class="flex ">
                         <button
-                            class="flex justify-center items-center mt-5 mx-3 w-20 p-2 rounded-lg text-lg text-white border-2 border-white hover:bg-gray-400">
+                            class="flex justify-center items-center mt-5 mx-3 w-20 p-2 rounded-lg text-lg text-white border-2 border-white hover:bg-gray-400"
+                            @click="deleteDocument(docId, socket)">
                             ✅</button>
                         <button
                             class="flex justify-center items-center mt-5 mx-3 w-20 p-2 rounded-lg text-lg text-white border-2 border-white hover:bg-gray-400"
@@ -29,8 +30,10 @@
 
 <script lang='ts' setup>
 import { useDeleteStore } from '@/stores/delete';
+import type { Socket } from 'socket.io-client';
 import { onMounted, ref } from 'vue';
 
+let { socket, docId } = defineProps(["socket", "docId"])
 let deleteDoc = ref();
 
 let clickOutside = () => {
@@ -41,6 +44,13 @@ let clickOutside = () => {
             }
         }
     }, true)
+}
+
+// ===== delete document =====
+const deleteDocument = (docId: string, socket: Socket) => {
+    socket.emit("delete-document", docId)
+
+
 }
 
 onMounted(() => {

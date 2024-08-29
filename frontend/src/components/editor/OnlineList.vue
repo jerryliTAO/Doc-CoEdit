@@ -36,8 +36,6 @@ import { ref } from 'vue';
 
 const { onlineList, docOwner } = defineProps(["onlineList", "docOwner"])
 let isShow = ref(false);
-
-console.log(onlineList)
 </script>
 
 

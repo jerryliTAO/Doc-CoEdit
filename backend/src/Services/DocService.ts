@@ -16,7 +16,7 @@ export const addAccessUser = async (docId: string, email: string) => {
     const user = await UserSchema.findOne({ email: email });
     const objectId = new mongoose.Types.ObjectId(docId);
     const doc = await DocSchema.findOne({ _id: objectId }, "_id owner");
-    if (user?._id === doc?.owner) {
+    if (user?._id.toString() === doc?.owner.toString()) {
       return "failed_Can't share to yourself.";
     }
 

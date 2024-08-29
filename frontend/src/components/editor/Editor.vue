@@ -31,17 +31,17 @@
                     <img src="@/images/logo.png" alt="" class="hover:cursor-pointer">
                 </RouterLink>
             </div>
-            <input type="text" name="title" ref="title"
+            <input type="text" name="title"
                 class="ml-5 bg-gray-300 font-serif focus:outline-blue-300 focus:border-none text-2xl font-semibold"
-                :value="doc.title">
+                v-model="title" :placeholder="$t('notNull')" @focus="isTitleChangeByUser = true;">
         </div>
 
         <div class="flex items-center mr-5">
             <div class="flex items-center" ref="onlyForOwner" v-if="userId == doc.owner._id">
                 <input type="text" name="addUser" id="addUser"
                     class="w-48 mr-1 rounded-md font-serif focus:outline-blue-300 focus:border-none"
-                    :placeholder="$t('addUser')">
-                <button class="mr-3 text-2xl ">✅</button>
+                    :placeholder="$t('addUser')" ref="grantedEmailElement" @keydown.enter="grantAccess">
+                <button class="mr-3 text-2xl " @click="grantAccess">✅</button>
                 <button class="mr-3 w-8 h-8">
                     <img src="@/images/userList.png" alt="" class="w-full h-full object:fill"
                         @click="useUserListStore().isShow = true">
@@ -62,42 +62,57 @@
         <div id="editor" ref="editor"></div>
     </div>
     <OnlineList :onlineList="usersInfo.onlineList" :docOwner="doc.owner"></OnlineList>
-    <UserList :userList="usersInfo.userList" :docId="docId" :socket="socket"></UserList>
-    <Delete></Delete>
+    <UserList :userList="usersInfo.userList" :onlineList="usersInfo.onlineList" :docId="docId" :socket="socket">
+    </UserList>
+    <Delete :socket="socket" :docId="docId"></Delete>
     <LostAccess :isLostAccess="isLostAccess"></LostAccess>
 
 </template>
 
 <script lang="ts">
 Quill.register("modules/resize", QuillResizeImage)
+Quill.register("modules/cursors", QuillCursors)
 </script>
 
 <script lang='ts' setup>
 import router from '@/router';
 import { useDeleteStore } from '@/stores/delete';
 import { useUserListStore } from '@/stores/user';
+import { COLOR_REPOSITORY } from '@/utils/colorRepository';
+import moment from 'moment';
 import Quill from 'quill';
+import QuillCursors from 'quill-cursors';
 import QuillResizeImage from 'quill-resize-image';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import Delete from './Delete.vue';
 import LostAccess from './LostAccess.vue';
 import OnlineList from './OnlineList.vue';
 import UserList from './UserList.vue';
+const COLOR_INDEX = Math.floor(Math.random() * (COLOR_REPOSITORY.length + 1))
 const editor = ref();
+const grantedEmailElement = ref();
 const SOCKET_URL = import.meta.env.VITE_APP_SOCKET_URL;
 const docId = location.pathname.split('/')[2]
-const userId = localStorage.getItem("userId");
+const userId = localStorage.getItem("userId") || '';
+const userName = ref();
+let quill: Quill
+let title = ref('')
 let newUserName = ref('');
 let leaveUserName = ref('');
 let isUserIn = ref(false)
 let isUserOut = ref(false)
 let isLostAccess = ref(false)
+let isTitleChangeByUser = ref(true);
 let timerElement1 = ref();
 let timerElement2 = ref();
+// change timer for debounce
+let changeContentsTimer: number;
+let changeTitleTimer: number;
 
+// data type structure
 let doc = reactive({
     _id: "",
     owner: {
@@ -111,6 +126,8 @@ let usersInfo = reactive<usersInfo>({
     onlineList: [],
     userList: []
 });
+
+
 
 let exportPDF = () => {
     window.print();
@@ -139,8 +156,21 @@ const timerInterval = (element: HTMLElement) => {
     const timer = setInterval(updateProgressBar, interval);
 };
 
+// ===== grant access =====
+const grantAccess = () => {
+    socket.emit("grant-access", {
+        userId: userId,
+        docId: docId,
+        email: grantedEmailElement.value.value
+    })
+}
+
+
+// ===== socket =====
 const socket = io(SOCKET_URL);
 onMounted(() => {
+
+    // ===== join =====
     socket.emit("join", { userId: userId, docId: docId })
 
     // for not exist doc
@@ -151,15 +181,19 @@ onMounted(() => {
     socket.on("join-finish", (data) => {
         Object.assign(doc, data.doc);
         Object.assign(usersInfo, data.usersInfo)
+        title.value = doc.title
+        userName.value = usersInfo.onlineList.find((user) => user?._id === userId)?.name
+        quill.setContents(data.doc.content)
     })
 
+    // ===== new user join and inform to every online user =====
     socket.on("new-user", (data) => {
         const { newUser, newOnlineList } = data
         newUserName.value = newUser;
         usersInfo.onlineList = newOnlineList;
 
         //  inform to all online user except this new user
-        if (usersInfo.onlineList.find((item) => item?._id === userId)?.name !== newUser) {
+        if (usersInfo.onlineList.find((user) => user?._id === userId)?.name !== newUser) {
             isUserIn.value = true;
             timerInterval(timerElement1.value)
             setTimeout(() => {
@@ -169,6 +203,19 @@ onMounted(() => {
 
     })
 
+    // ===== receive grant =====
+    socket.on("receive-granted", (data) => {
+        if (data.status === "success") {
+            usersInfo.userList = data.updateUserList
+            alert("Success add a new user.")
+        } else if (data.status === "failed") {
+            alert("User not found or User already been shared this doc.")
+        } else {
+            alert(data.status)
+        }
+    })
+
+    // ===== delete shared user =====
     socket.on("delete-user", (data) => {
         const { deleteId, deleteName } = data;
 
@@ -182,15 +229,17 @@ onMounted(() => {
         }
 
         //
-        leaveUserName.value = deleteName;
-        isUserOut.value = true;
-        timerInterval(timerElement2.value)
-        setTimeout(() => {
-            isUserOut.value = false;
-        }, 2000)
-
+        if (data.isDeletedUserOnline) {
+            leaveUserName.value = deleteName;
+            isUserOut.value = true;
+            timerInterval(timerElement2.value)
+            setTimeout(() => {
+                isUserOut.value = false;
+            }, 2000)
+        }
     })
 
+    // ===== inform every online user that somebody left =====
     socket.on("user-leave", (data) => {
         const { name, onlineList } = data
         usersInfo.onlineList = onlineList
@@ -206,7 +255,7 @@ onMounted(() => {
 
 
 
-    const quill = new Quill(editor.value, {
+    quill = new Quill(editor.value, {
         theme: 'snow',
         modules: {
             toolbar: [
@@ -224,15 +273,75 @@ onMounted(() => {
                 ['link', 'image'],
                 ['clean']
             ],
+            cursors: {
+                transformOnTextChange: true
+            },
             resize: {
                 locale: {},
             },
         }
     })
+
+    const cursors = quill.getModule('cursors') as QuillCursors
+    cursors.createCursor(userId, userName.value, COLOR_REPOSITORY[COLOR_INDEX])
+
+
+
+    // ===== content change =====
+    quill.on("text-change", (delta, oldContent, source) => {
+        // update by user not by api like quill.updateContents
+        if (source == "user") {
+            socket.emit("send-change", { docId: docId, delta: delta })
+            clearTimeout(changeContentsTimer)
+            changeContentsTimer = setTimeout(() => {
+                socket.emit("save-contents", { docId: docId, contents: quill.getContents(), lastModified: moment().format("YYYY-MM-DD HH:mm:ss") })
+            }, 2000)
+        }
+
+    })
+
+    socket.on("receive-contents", (delta) => {
+        quill.updateContents(delta);
+    })
+
+
+
+    // ===== title change =====
+    watch(() => title.value, (newTitle, oldTitle) => {
+        // this is the debounce function
+        clearTimeout(changeTitleTimer)
+
+        // to check the change is from user not from api. true=> from user / false => from api
+        if (isTitleChangeByUser.value) {
+            changeTitleTimer = setTimeout(() => {
+                socket.emit("title-changed", {
+                    docId: docId,
+                    title: newTitle
+                })
+            }, 2000)
+        }
+
+    })
+
+
+    socket.on("receive-title", (data) => {
+        // to mark title is change by api
+        isTitleChangeByUser.value = false;
+        title.value = data;
+    })
+
+    // ===== receive delete =====
+    socket.on("receive-delete-document", () => {
+        if (userId == doc.owner._id) {
+            router.replace("/user/home")
+        } else {
+            isLostAccess.value = true;
+        }
+    })
 });
 
 onBeforeUnmount(() => {
-    // leave the doc and disconnect the socket
+    // ===== leave the doc and disconnect the socket =====
     socket.emit('leave', { userId: userId, docId: docId });
     socket.disconnect();
 })

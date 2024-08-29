@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import { onlineListUser, userListUser, usersInfo } from "./interfaces/usersInfo";
 import { DocSchema } from "./models/DocSchema";
 import { UserSchema } from "./models/UserSchema";
+import { addAccessUser } from "./Services/DocService";
 
 const dotenv = config();
 const ORIGIN = process.env.ORIGIN;
@@ -73,34 +74,6 @@ export const socketServer = () => {
       io.to(docId).emit("new-user", { newUser: user?.name, newOnlineList: usersInfo.onlineList });
     });
 
-    //===== delete shared user =====
-    socket.on("delete-user", async (data) => {
-      const { userId, docId } = data;
-      let usersInfo = docs.get(docId);
-      let deleteName: string | undefined;
-      // delete user from user list
-      const userIndex = usersInfo?.userList.findIndex((user) => user?._id.toString() === userId);
-      if (userIndex !== -1 && userIndex !== undefined) {
-        usersInfo?.userList.splice(userIndex, 1);
-      }
-      // update data in db
-      await UserSchema.findOneAndUpdate({ _id: userId }, { $pull: { shared: docId } });
-
-      // delete user from online list
-      const onlineIndex = usersInfo?.onlineList.findIndex((user) => user?._id.toString() === userId);
-      if (onlineIndex !== -1 && onlineIndex !== undefined) {
-        deleteName = usersInfo?.onlineList[onlineIndex]?.name;
-        usersInfo?.onlineList.splice(onlineIndex, 1);
-      }
-
-      let document = {
-        deleteId: userId,
-        deleteName: deleteName,
-        usersInfo: usersInfo,
-      };
-      io.to(docId).emit("delete-user", document);
-    });
-
     // ===== user leave the document =====
     socket.on("leave", (data) => {
       const { userId, docId } = data;
@@ -120,6 +93,79 @@ export const socketServer = () => {
         name: name,
         onlineList: doc?.onlineList,
       });
+    });
+
+    // ===== grant access =====
+    socket.on("grant-access", async (data) => {
+      const { userId, docId, email } = data;
+      const result = await addAccessUser(docId, email);
+      if (result === "success") {
+        const grantedAccessUser: userListUser | undefined | null = await UserSchema.findOne({ email: email }, "_id email");
+        docs.get(docId)?.userList.push(grantedAccessUser);
+        const updateUserList = docs.get(docId)?.userList;
+        socket.emit("receive-granted", {
+          status: "success",
+          updateUserList: updateUserList,
+        });
+      } else {
+        socket.emit("receive-granted", {
+          status: result,
+        });
+      }
+    });
+
+    //===== delete shared user =====
+    socket.on("delete-user", async (data) => {
+      const { userId, docId } = data;
+      let usersInfo = docs.get(docId);
+      let deleteName: string | undefined;
+      // delete user from user list
+      const userIndex = usersInfo?.userList.findIndex((user) => user?._id.toString() === userId);
+      if (userIndex !== -1 && userIndex !== undefined) {
+        usersInfo?.userList.splice(userIndex, 1);
+      }
+      // update data in db
+      await UserSchema.findOneAndUpdate({ _id: userId }, { $pull: { shared: docId } });
+
+      // delete user from online list
+      const onlineIndex = usersInfo?.onlineList.findIndex((user) => user?._id.toString() === userId);
+      let isDeletedUserOnline = false;
+      if (onlineIndex !== -1 && onlineIndex !== undefined) {
+        deleteName = usersInfo?.onlineList[onlineIndex]?.name;
+        usersInfo?.onlineList.splice(onlineIndex, 1);
+        isDeletedUserOnline = true;
+      }
+
+      let document = {
+        deleteId: userId,
+        deleteName: deleteName,
+        usersInfo: usersInfo,
+        isDeletedUserOnline: isDeletedUserOnline,
+      };
+      io.to(docId).emit("delete-user", document);
+    });
+
+    // ===== save title =====
+    socket.on("title-changed", async (data) => {
+      const { docId, title } = data;
+      await DocSchema.findOneAndUpdate({ _id: docId }, { title: title });
+      socket.broadcast.to(docId).emit("receive-title", title);
+    });
+
+    // ===== save content =====
+    socket.on("send-change", async (data) => {
+      const { docId, delta } = data;
+      socket.broadcast.to(docId).emit("receive-contents", delta);
+    });
+    socket.on("save-contents", async (data) => {
+      const { docId, contents, lastModified } = data;
+      const updateDoc = await DocSchema.findByIdAndUpdate(docId, { content: contents, lastModified: lastModified });
+    });
+
+    // ===== delete document =====
+    socket.on("delete-document", async (docId) => {
+      await DocSchema.findByIdAndDelete({ _id: docId });
+      io.to(docId).emit("receive-delete-document");
     });
 
     // ===== user leave the document and disconnect to the socket for releasing resource

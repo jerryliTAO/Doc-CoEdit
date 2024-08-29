@@ -39,7 +39,7 @@ export const singIn = async (email: string, password: string) => {
       const validatePassword = await bcrypt.compare(password, user.password);
       if (validatePassword) {
         let token = jwt.sign({ _id: user._id, name: user.name }, secretOrKey, {
-          expiresIn: "30s",
+          expiresIn: "1h",
         });
         token = "bearer " + token;
         return { userId: user._id, token: token };

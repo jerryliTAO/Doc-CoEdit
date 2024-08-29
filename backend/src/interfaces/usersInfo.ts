@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 
 export interface usersInfo {
-  userList: Array<userListUser | undefined>;
+  userList: Array<userListUser | undefined | null>;
   onlineList: Array<onlineListUser | undefined>;
 }
 

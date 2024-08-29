@@ -3,7 +3,7 @@ interface doc {
   name?: string;
   title?: string;
   cover?: string;
-  lastmodified?: string;
+  lastModified?: string;
   owner: { name?: string };
 }
 

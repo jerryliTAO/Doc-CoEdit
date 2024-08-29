@@ -16,6 +16,7 @@
     "moment": "^2.30.1",
     "pinia": "^2.1.7",
     "quill": "^2.0.2",
+    "quill-cursors": "^4.0.3",
     "quill-resize-image": "^1.0.4",
     "socket.io-client": "^4.7.5",
     "vue": "^3.4.29",

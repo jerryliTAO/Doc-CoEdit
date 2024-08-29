@@ -47,5 +47,6 @@
     "lastOpened": "LastOpened",
     "singInExpired": "Sing in expired.",
     "join": "join to edit.",
-    "leave": "leave."
+    "leave": "leave.",
+    "notNull": "Type document name. It can't be null."
 }
