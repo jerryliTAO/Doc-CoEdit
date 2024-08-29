@@ -6,6 +6,7 @@
 <script lang='ts' setup>
 import router from '@/router';
 import { useLoadingStore } from '@/stores/loading';
+import { useMenuStore } from '@/stores/menu';
 import axios from '@/utils/axios';
 import { unauthenticate } from '@/utils/unauthenticate';
 import { onMounted } from 'vue';
@@ -34,6 +35,7 @@ onMounted(async () => {
     let result = await createDoc(userId)
     // create doc success, redirect to editor
     if (result.status === "success") {
+        useMenuStore().isShow = false
         router.replace({
             name: 'editor', params: {
                 docId: result.data._id

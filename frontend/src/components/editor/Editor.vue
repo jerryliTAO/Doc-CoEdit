@@ -333,6 +333,7 @@ onMounted(() => {
     // ===== receive delete =====
     socket.on("receive-delete-document", () => {
         if (userId == doc.owner._id) {
+            useDeleteStore().isShow = false
             router.replace("/user/home")
         } else {
             isLostAccess.value = true;
