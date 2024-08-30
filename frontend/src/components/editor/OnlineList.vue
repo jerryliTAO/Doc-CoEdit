@@ -2,7 +2,7 @@
     <div class="fixed bottom-5 right-10 w-10 h-10 bg-black rounded-full hover:cursor-pointer print:hidden"
         @click="isShow = !isShow">
         <img src="@/images/user.png" alt="">
-        <div class="fixed bottom-1 right-6 flex justify-center items-center w-10 h-10 font-serif text-xl text-yellow-100 font-semibold"
+        <div class="fixed bottom-1 right-6 flex justify-center items-center w-10 h-10 font-serif text-xl text-yellow-800 font-semibold"
             ref="online_number">
             {{ onlineList.length }}</div>
     </div>

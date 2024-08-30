@@ -168,6 +168,11 @@ export const socketServer = () => {
       io.to(docId).emit("receive-delete-document");
     });
 
+    // ===== editing user cursor =====
+    socket.on("user-editing", (cursorInfo) => {
+      socket.broadcast.to(cursorInfo.docId).emit("receive-cursor", cursorInfo);
+    });
+
     // ===== user leave the document and disconnect to the socket for releasing resource
     socket.on("disconnect", () => {
       console.log("user leave");

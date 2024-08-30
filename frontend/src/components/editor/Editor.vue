@@ -163,13 +163,14 @@ const grantAccess = () => {
         docId: docId,
         email: grantedEmailElement.value.value
     })
+    grantedEmailElement.value.value = '';
 }
 
 
 // ===== socket =====
 const socket = io(SOCKET_URL);
 onMounted(() => {
-
+    console.log(COLOR_INDEX)
     // ===== join =====
     socket.emit("join", { userId: userId, docId: docId })
 
@@ -282,8 +283,7 @@ onMounted(() => {
         }
     })
 
-    const cursors = quill.getModule('cursors') as QuillCursors
-    cursors.createCursor(userId, userName.value, COLOR_REPOSITORY[COLOR_INDEX])
+
 
 
 
@@ -337,8 +337,40 @@ onMounted(() => {
             router.replace("/user/home")
         } else {
             isLostAccess.value = true;
+            socket.disconnect();
         }
     })
+
+
+
+    // ================== cursors related ====================
+    const cursors = quill.getModule('cursors') as QuillCursors
+
+    // ===== create cursors =====
+    quill.on("selection-change", (range, oldRange, source) => {
+        if (range) {
+            socket.emit("user-editing", {
+                userId: userId,
+                userName: userName.value,
+                range: range,
+                color: COLOR_REPOSITORY[COLOR_INDEX],
+                docId: docId
+            })
+        }
+    })
+    socket.on("receive-cursor", (cursorInfo) => {
+        const { userId, userName, range, color, docId } = cursorInfo
+        cursors.createCursor(userId, userName, color)
+        cursors.moveCursor(userId, range)
+    })
+
+
+
+
+
+
+
+
 });
 
 onBeforeUnmount(() => {
