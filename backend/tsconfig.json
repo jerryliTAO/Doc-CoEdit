@@ -12,7 +12,7 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "extends": "@tsconfig/node20/tsconfig.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/test/auth.test.js"],
   "exclude": ["node_modules"],
   "ts-node": { "esm": true }
 }

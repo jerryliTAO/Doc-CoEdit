@@ -174,8 +174,6 @@ export const socketServer = () => {
     });
 
     // ===== user leave the document and disconnect to the socket for releasing resource
-    socket.on("disconnect", () => {
-      console.log("user leave");
-    });
+    socket.on("disconnect", () => {});
   });
 };

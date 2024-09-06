@@ -48,5 +48,7 @@
     "singInExpired": "Sing in expired.",
     "join": "join to edit.",
     "leave": "leave.",
-    "notNull": "Type document name. It can't be null."
+    "notNull": "Type document name. It can't be null.",
+    "saving": "Modified Saving...",
+    "saved": "Saved !"
 }

@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
+import { config } from "dotenv";
 import jwt from "jsonwebtoken";
 import { UserSchema } from "../models/UserSchema";
+const dotenv = config();
 
 const secretOrKey = process.env.JWT_SECRET_KEY || "";
 
@@ -22,7 +24,7 @@ export const singUp = async (email: string, password: string, name: string) => {
 
   // sign up success and create a token
   let token = jwt.sign({ _id: newUser._id, name: newUser.name }, secretOrKey, {
-    expiresIn: "30s",
+    expiresIn: "1h",
   });
   token = "bearer " + token;
   return { userId: newUser._id, token: token };

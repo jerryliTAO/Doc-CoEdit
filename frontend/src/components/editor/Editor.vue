@@ -34,6 +34,17 @@
             <input type="text" name="title"
                 class="ml-5 bg-gray-300 font-serif focus:outline-blue-300 focus:border-none text-2xl font-semibold"
                 v-model="title" :placeholder="$t('notNull')" @focus="isTitleChangeByUser = true;">
+            <div class="flex items-center" v-show="isSync">
+                <img src="@/images/cloudSync.png" alt="" class="w-10 h-10">
+                <div class="flex justify-center items-center ml-5 text-teal-500 font-serif font-semibold text-2xl"
+                    v-show="isSaving">{{
+                        $t("saving") }}
+                </div>
+                <div class="flex justify-center items-center ml-5 text-teal-500 font-serif font-semibold text-2xl"
+                    v-show="!isSaving">{{
+                        $t("saved") }}
+                </div>
+            </div>
         </div>
 
         <div class="flex items-center mr-5">
@@ -104,6 +115,8 @@ let newUserName = ref('');
 let leaveUserName = ref('');
 let isUserIn = ref(false)
 let isUserOut = ref(false)
+let isSync = ref(false)
+let isSaving = ref(false)
 let isLostAccess = ref(false)
 let isTitleChangeByUser = ref(true);
 let timerElement1 = ref();
@@ -170,7 +183,6 @@ const grantAccess = () => {
 // ===== socket =====
 const socket = io(SOCKET_URL);
 onMounted(() => {
-    console.log(COLOR_INDEX)
     // ===== join =====
     socket.emit("join", { userId: userId, docId: docId })
 
@@ -291,10 +303,16 @@ onMounted(() => {
     quill.on("text-change", (delta, oldContent, source) => {
         // update by user not by api like quill.updateContents
         if (source == "user") {
+            isSync.value = true;
+            isSaving.value = true;
             socket.emit("send-change", { docId: docId, delta: delta })
             clearTimeout(changeContentsTimer)
-            changeContentsTimer = setTimeout(() => {
-                socket.emit("save-contents", { docId: docId, contents: quill.getContents(), lastModified: moment().format("YYYY-MM-DD HH:mm:ss") })
+            changeContentsTimer = window.setTimeout(() => {
+                isSaving.value = false;
+                socket.emit("save-contents", { docId: docId, contents: quill.getContents(), lastModified: moment().format("YYYY-MM-DD HH:mm:ss") });
+                setTimeout(() => {
+                    isSync.value = false;
+                }, 2000)
             }, 2000)
         }
 
@@ -313,7 +331,7 @@ onMounted(() => {
 
         // to check the change is from user not from api. true=> from user / false => from api
         if (isTitleChangeByUser.value) {
-            changeTitleTimer = setTimeout(() => {
+            changeTitleTimer = window.setTimeout(() => {
                 socket.emit("title-changed", {
                     docId: docId,
                     title: newTitle

@@ -48,5 +48,7 @@
     "singInExpired": "登入過期",
     "join": "加入編輯",
     "leave": "已離開",
-    "notNull": "請輸入檔案名稱 不可以為空"
+    "notNull": "請輸入檔案名稱 不可以為空",
+    "saving": "修改儲存中...",
+    "saved": "儲存完成 !"
 }

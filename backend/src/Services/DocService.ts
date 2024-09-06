@@ -1,20 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { DocSchema } from "../models/DocSchema";
 import { UserSchema } from "../models/UserSchema";
 
 export const createDoc = async (_id: mongoose.Types.ObjectId) => {
-  try {
-    const newDoc = await DocSchema.create({ owner: _id });
-    return newDoc;
-  } catch (error) {
-    console.log(error);
-  }
+  const newDoc = await DocSchema.create({ owner: _id });
+  return newDoc;
 };
 
 export const addAccessUser = async (docId: string, email: string) => {
   try {
     const user = await UserSchema.findOne({ email: email });
-    const objectId = new mongoose.Types.ObjectId(docId);
+    const objectId = new Types.ObjectId(docId);
     const doc = await DocSchema.findOne({ _id: objectId }, "_id owner");
     if (user?._id.toString() === doc?.owner.toString()) {
       return "failed_Can't share to yourself.";
@@ -73,7 +69,8 @@ export const deleteDocById = async (docId: string) => {
 
 export const updateDocCover = async (id: string, cover: string) => {
   try {
-    const result = await DocSchema.findOneAndUpdate({ _id: id }, { cover: cover });
+    const result = await DocSchema.findOneAndUpdate({ _id: id }, { cover: cover }, { new: true });
+    console.log(result);
     if (result !== null) {
       return 1;
     }

@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { DocSchema } from "../models/DocSchema";
 import { UserSchema } from "../models/UserSchema";
 
@@ -10,16 +9,7 @@ export const getUserALLInfo = async (userId: string) => {
       populate: { path: "owner", select: "name" },
     });
 
-    //get user docs
-    let findDoc: object = {};
-    if (mongoose.Types.ObjectId.isValid(userId)) {
-      findDoc = await DocSchema.find(
-        {
-          owner: new mongoose.Types.ObjectId(userId),
-        },
-        "-owner"
-      );
-    }
+    let findDoc = await DocSchema.find({ owner: userId }, "-owner");
 
     //set user information
     if (findUser) {

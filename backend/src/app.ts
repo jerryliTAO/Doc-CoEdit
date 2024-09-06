@@ -42,3 +42,5 @@ app.listen(8080, () => {
 });
 
 socketServer();
+
+export default app;
