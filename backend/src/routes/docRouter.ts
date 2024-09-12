@@ -15,3 +15,4 @@ docRouter.get("/myShared/:userId", DocController.getMyShared);
 docRouter.patch("/updateCover", DocController.updateDocCover);
 
 //======= Delete ======
+docRouter.delete("/deleteDoc", DocController.deleteDocById);

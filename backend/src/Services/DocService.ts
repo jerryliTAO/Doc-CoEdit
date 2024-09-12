@@ -3,8 +3,12 @@ import { DocSchema } from "../models/DocSchema";
 import { UserSchema } from "../models/UserSchema";
 
 export const createDoc = async (_id: mongoose.Types.ObjectId) => {
-  const newDoc = await DocSchema.create({ owner: _id });
-  return newDoc;
+  try {
+    const newDoc = await DocSchema.create({ owner: _id });
+    return newDoc;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const addAccessUser = async (docId: string, email: string) => {
@@ -70,7 +74,6 @@ export const deleteDocById = async (docId: string) => {
 export const updateDocCover = async (id: string, cover: string) => {
   try {
     const result = await DocSchema.findOneAndUpdate({ _id: id }, { cover: cover }, { new: true });
-    console.log(result);
     if (result !== null) {
       return 1;
     }

@@ -40,14 +40,21 @@ describe("doc", () => {
     sandbox.restore();
   });
 
+  // // ===== create doc =====
   describe("create doc", () => {
     it("should create doc", async () => {
       createStub.resolves(newDoc);
       const result = await DocService.createDoc(new Types.ObjectId("66c7d69d0f64ca6985b8765b"));
       expect(result).toEqual(newDoc);
     });
+
+    it("should create error", async () => {
+      createStub.throws();
+      await expect(DocService.createDoc(new Types.ObjectId("66c7d69d0f64ca6985b8765b"))).rejects.toThrow();
+    });
   });
 
+  // ===== grant access =====
   describe("grant access", () => {
     it("should not shared to yourself", async () => {
       let user = {
@@ -85,7 +92,14 @@ describe("doc", () => {
       const result = await DocService.addAccessUser("66c7d69d0f64ca6985b7788b", "test123@gmail.com");
       expect(result).toStrictEqual("failed");
     });
+
+    it("should grant access error", async () => {
+      userFindOneStub.throws();
+      await expect(DocService.addAccessUser("66c7d69d0f64ca6985b7788b", "test123@gmail.com")).rejects.toThrow();
+    });
   });
+
+  // ===== get my doc =====
   describe("get my doc", () => {
     it("should get my doc", async () => {
       let myDoc = [
@@ -108,7 +122,14 @@ describe("doc", () => {
       const result = await DocService.getMyDoc("66c7d69d0f64ca6985b9345b");
       expect(result).toStrictEqual(myDoc);
     });
+
+    it("should get my doc error", async () => {
+      findStub.throws();
+      await expect(DocService.getMyDoc("66c7d69d0f64ca6985b9345b")).rejects.toThrow();
+    });
   });
+
+  // ===== get my shared =====
   describe("get my shared", () => {
     it("should get my shared", async () => {
       let sharedDoc = {
@@ -128,7 +149,14 @@ describe("doc", () => {
       const result = await DocService.getMyShared("66c7d69d0f64ca6985b9345b");
       expect(result).toStrictEqual(sharedDoc.shared);
     });
+
+    it("should get my shared error", async () => {
+      findByIdStub.throws();
+      await expect(DocService.getMyShared("66c7d69d0f64ca6985b9345b")).rejects.toThrow();
+    });
   });
+
+  // ===== delete doc =====
   describe("delete doc", () => {
     it("should delete doc", async () => {
       let deleteDoc = {
@@ -145,7 +173,14 @@ describe("doc", () => {
       const result = await DocService.deleteDocById("66c7d69d0f64ca6985b9345b");
       expect(result).toBe(0);
     });
+
+    it("should delete doc error", async () => {
+      findOneAndDeleteStub.throws();
+      await expect(DocService.deleteDocById("66c7d69d0f64ca6985b9345b")).rejects.toThrow();
+    });
   });
+
+  // ===== update cover =====
   describe("update cover", () => {
     beforeEach(() => {
       docFindOneAndUpdateStub = sandbox.stub(DocSchema, "findOneAndUpdate");
@@ -174,6 +209,16 @@ describe("doc", () => {
         "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
       );
       expect(result).toBe(0);
+    });
+
+    it("should update error", async () => {
+      docFindOneAndUpdateStub.throws();
+      await expect(
+        DocService.updateDocCover(
+          "66c7d69d0f64ca6985b9345b",
+          "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        )
+      ).rejects.toThrow();
     });
   });
 });
