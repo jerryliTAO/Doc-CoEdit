@@ -13,6 +13,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    chunkSizeWarningLimit: 1500,
   },
   server: {
     // This is the default value, and will add all files with node_modules
