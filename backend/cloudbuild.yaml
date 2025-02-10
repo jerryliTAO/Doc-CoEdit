@@ -9,8 +9,8 @@ steps:
     args: ["run", "test"]
     env:
       - "DB_CONNECTION=${_DB_CONNECTION}"
-      - "ENV JWT_SECRET_KEY=${_JWT_SECRET_KEY}"
-      - "ENV ORIGIN=${_ORIGIN}"
+      - "JWT_SECRET_KEY=${_JWT_SECRET_KEY}"
+      - "ORIGIN=${_ORIGIN}"
     dir: "backend"
 
   # Build the container image
