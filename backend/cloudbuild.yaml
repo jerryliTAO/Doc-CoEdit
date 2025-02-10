@@ -19,7 +19,7 @@ steps:
     [
       "build",
       "-t",
-      ""asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest"", # 需要修改位置
+      "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest", # 需要修改位置
       "--build-arg",
       "DB_CONNECTION=${_DB_CONNECTION}",
       "--build-arg",
@@ -40,7 +40,7 @@ steps:
     args:
     [ 
       "push",
-      ""asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest"" # 需要修改位置
+      "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest" # 需要修改位置
    ]
      id: Pushing image to artifact registry
 
