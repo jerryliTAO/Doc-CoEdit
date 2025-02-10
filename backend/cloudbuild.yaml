@@ -6,7 +6,7 @@ steps:
     dir: "backend"
   - name: node
     entrypoint: npm
-    args: ["run","test"]
+    args: ["run", "test"]
     env:
       - "DB_CONNECTION=${_DB_CONNECTION}"
       - "ENV JWT_SECRET_KEY=${_JWT_SECRET_KEY}"
@@ -15,34 +15,32 @@ steps:
 
   # Build the container image
   - name: gcr.io/cloud-builders/docker
-    args:
-    [
-      "build",
-      "-t",
-      "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest", # 需要修改位置
-      "--build-arg",
-      "DB_CONNECTION=${_DB_CONNECTION}",
-      "--build-arg",
-      "JWT_SECRET_KEY=${_JWT_SECRET_KEY}",
-      "--build-arg",
-      "ORIGIN=${_ORIGIN}",
-      "./backend/"
-    ]
+    args: [
+        "build",
+        "-t",
+        "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest", # 需要修改位置
+        "--build-arg",
+        "DB_CONNECTION=${_DB_CONNECTION}",
+        "--build-arg",
+        "JWT_SECRET_KEY=${_JWT_SECRET_KEY}",
+        "--build-arg",
+        "ORIGIN=${_ORIGIN}",
+        "./backend/",
+      ]
     id: Building the container image
 
   # two ways to push image to artifact registry : "docker push" and "images"
   # docker push just stored image
   # images : after build complete, it can show the build result
   # If I want to store the image as part of your build flow and want to display the image in the build results, use both
-  
+
   # Push the image to artifact registry.
   - name: gcr.io/cloud-builders/docker
-    args:
-    [ 
-      "push",
-      "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest" # 需要修改位置
-   ]
-     id: Pushing image to artifact registry
+    args: [
+        "push",
+        "asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest", # 需要修改位置
+      ]
+    id: Pushing image to artifact registry
 
 # Push the image to artifact registry
 images:
