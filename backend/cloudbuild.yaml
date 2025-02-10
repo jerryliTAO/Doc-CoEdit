@@ -43,5 +43,4 @@ steps:
     id: Pushing image to artifact registry
 
 # Push the image to artifact registry
-images:
-  - ["asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest"] # 需要修改位置
+images: ["asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest"] # 需要修改位置
