@@ -44,3 +44,5 @@ steps:
 
 # Push the image to artifact registry
 images: ["asia-east1-docker.pkg.dev/$PROJECT-ID/doc-coedit-repository/${_APP_SERVICE_NAME}:latest"] # 需要修改位置
+options:
+  logging: CLOUD_LOGGING_ONLY
