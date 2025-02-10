@@ -4,7 +4,8 @@ import sinon from "sinon";
 import { UserSchema } from "../models/UserSchema";
 import * as AuthService from "../Services/AuthService";
 
-const secretOrKey = process.env.JWT_SECRET_KEY || "";
+// const secretOrKey = process.env.JWT_SECRET_KEY || "";
+
 describe("sing in", () => {
   let findOneStub: sinon.SinonStub;
   let comparePasswordStub: sinon.SinonStub;
@@ -42,7 +43,7 @@ describe("sing in", () => {
     expect(
       jwtSignInSpy.calledWithMatch(
         { _id: user._id, name: user.name },
-        sinon.match(secretOrKey),
+        sinon.match(process.env.JWT_SECRET_KEY || ""),
         sinon.match({
           expiresIn: "1h",
         })
@@ -123,7 +124,7 @@ describe("sing up", () => {
     expect(
       jwtSignInSpy.calledWithMatch(
         { _id: newUser._id, name: newUser.name },
-        sinon.match(secretOrKey),
+        sinon.match(process.env.JWT_SECRET_KEY || ""),
         sinon.match({
           expiresIn: "1h",
         })
