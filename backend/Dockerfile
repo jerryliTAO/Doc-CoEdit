@@ -12,4 +12,3 @@ WORKDIR /root/app
 COPY . /root/app
 RUN npm i
 CMD ["npx","tsx","src/app.ts"]
-#test CI
