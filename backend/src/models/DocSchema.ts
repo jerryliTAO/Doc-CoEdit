@@ -34,7 +34,7 @@ docSchema.pre("findOneAndDelete", async function (next) {
     await UserSchema.updateMany({ shared: deleteId }, { $pull: { shared: deleteId } });
 
     //delete use's recentOpened doc which contains deleteId
-    await UserSchema.updateMany({ recentOpened: deleteId }, { $pull: { recentOpened: deleteId } });
+    await UserSchema.updateMany({ $pull: { recentOpened: { _id: deleteId } } });
 
     next();
   } catch (error) {
