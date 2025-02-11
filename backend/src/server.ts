@@ -25,7 +25,7 @@ export const socketServer = () => {
   io.on("connection", (socket) => {
     //  ====== user open the document ====
     socket.on("join", async (data) => {
-      const { userId, docId } = data;
+      const { userId, docId, lastOpened } = data;
       // get document information
       const doc: Doc | null = (await DocSchema.findById({ _id: docId }, "_id title owner content").populate({
         path: "owner",
@@ -38,7 +38,7 @@ export const socketServer = () => {
       }
       // open a unique room for the document to deliver information such as online user list, document content etc to user who is editing
       socket.join(docId);
-      const user = await UserSchema.findOne({ _id: userId }, "_id email name photoSticker");
+      const user = await UserSchema.findOne({ _id: userId }, "_id email name photoSticker recentOpened");
       let usersInfo = docs.get(docId);
 
       // if there're no user editing
@@ -60,6 +60,20 @@ export const socketServer = () => {
           }
         }
       }
+
+      // update user's recently opened document list
+      const recentOpened = user?.recentOpened;
+      // if document have been opened, update last open date
+      if (recentOpened?.length != 0) {
+        // find the index of document in the array and delete
+        const docIndex = recentOpened?.findIndex((item) => item._id == docId);
+        if (docIndex !== -1 && typeof docIndex === "number") {
+          recentOpened?.splice(docIndex, 1);
+        }
+      }
+      // add document in array
+      recentOpened?.unshift({ _id: docId, lastOpened: lastOpened });
+      await UserSchema.findOneAndUpdate({ _id: userId }, { recentOpened: recentOpened });
 
       // update document information
       docs.set(docId, usersInfo);

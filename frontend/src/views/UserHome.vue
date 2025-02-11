@@ -16,7 +16,7 @@
             <div>{{ $t("modify") }}</div>
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
-                <DocCard v-for="doc in userAllInfo.shared" :id="doc._id" :title="doc.title" :owner="doc.owner.name"
+                <DocCard v-for="doc in userAllInfo.allDoc" :id="doc._id" :title="doc.title" :owner="doc.owner.name"
                     :lastmodified="doc.lastModified" :image="doc.cover" :key="doc._id">
                     <div class="text-xs">{{ $t('lastModified') }}：{{
                         moment(doc.lastModified).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
@@ -32,10 +32,10 @@
             <div>{{ $t("open") }}</div>
             <hr class="w-20">
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
-                <DocCard v-for="doc in mockDataOpened" :id="doc.id" :title="doc.title" :owner="doc.owner"
-                    :lastmodified="doc.lastmodified" :image="doc.image">
+                <DocCard v-for="doc in userAllInfo.recentOpened" :id="doc._id?._id" :title="doc._id?.title"
+                    :owner="doc._id?.owner.name" :lastmodified="doc._id?.lastModified" :image="doc._id?.cover">
                     <div class="text-xs">{{ $t('lastOpened') }}：{{
-                        moment(doc.lastmodified).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
+                        moment(doc.lastOpened).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
                 </DocCard>
             </div>
         </div>
@@ -72,6 +72,26 @@ const getUserAllInfo = async (userId: string) => {
 onMounted(async () => {
     let result = await getUserAllInfo(userId)
     if (result.status === "success") {
+
+        // set a list for all doc include shared and own
+        let allDoc: Array<doc> = [];
+        let sharedArray: Array<doc> = result.data.shared;
+        let myDoc: Array<doc> = result.data.myDoc;
+        sharedArray.forEach(element => {
+            allDoc.push(element)
+        })
+        myDoc.forEach(element => {
+            allDoc.push(element)
+        })
+
+        //  short documents by date
+        allDoc.sort((a, b) =>
+            new Date(b.lastModified) - new Date(a.lastModified)
+        )
+        result.data.allDoc = allDoc;
+        console.log(allDoc)
+
+        console.log(result.data)
         Object.assign(userAllInfo, result.data)
     } else if (result.status === "token failed") {
         unauthenticate(result, t);

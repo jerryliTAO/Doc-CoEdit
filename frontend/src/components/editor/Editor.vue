@@ -184,7 +184,7 @@ const grantAccess = () => {
 const socket = io(SOCKET_URL);
 onMounted(() => {
     // ===== join =====
-    socket.emit("join", { userId: userId, docId: docId })
+    socket.emit("join", { userId: userId, docId: docId, lastOpened: moment().format("YYYY-MM-DD HH:mm:ss") })
 
     // for not exist doc
     socket.on("doc-not-exist", () => {

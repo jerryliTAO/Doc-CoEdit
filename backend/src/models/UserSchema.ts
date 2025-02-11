@@ -23,7 +23,9 @@ const userSchema = new Schema({
           type: Schema.Types.ObjectId,
           ref: "Document",
         },
-        lastOpened: Date,
+        lastOpened: {
+          type: Date,
+        },
       },
     ],
     default: [],

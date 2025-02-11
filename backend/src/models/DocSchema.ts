@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Schema, model } from "mongoose";
 import { UserSchema } from "./UserSchema";
 const docSchema = new Schema({
@@ -16,11 +17,11 @@ const docSchema = new Schema({
   },
   cover: {
     type: String,
-    default:
-      "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    default: "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
   lastModified: {
     type: Date,
+    default: moment(),
   },
 });
 
@@ -30,16 +31,10 @@ docSchema.pre("findOneAndDelete", async function (next) {
     const deleteId = this.getFilter()._id;
 
     // delete use's shared doc which contains deleteId
-    await UserSchema.updateMany(
-      { shared: deleteId },
-      { $pull: { shared: deleteId } }
-    );
+    await UserSchema.updateMany({ shared: deleteId }, { $pull: { shared: deleteId } });
 
     //delete use's recentOpened doc which contains deleteId
-    await UserSchema.updateMany(
-      { "recentOpened._id": deleteId },
-      { $pull: { "recentOpened._id": deleteId } }
-    );
+    await UserSchema.updateMany({ recentOpened: deleteId }, { $pull: { recentOpened: deleteId } });
 
     next();
   } catch (error) {

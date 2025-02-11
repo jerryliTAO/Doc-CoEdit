@@ -11,3 +11,8 @@ interface Doc {
   owner: User;
   content: string;
 }
+
+interface recentOpened {
+  _id: string;
+  recentOpened: Date;
+}

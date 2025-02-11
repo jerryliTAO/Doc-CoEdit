@@ -4,12 +4,16 @@ import { UserSchema } from "../models/UserSchema";
 // get all user information
 export const getUserALLInfo = async (userId: string) => {
   try {
-    let findUser = await UserSchema.findById(userId, "-email -password").populate({
-      path: "shared",
-      populate: { path: "owner", select: "name" },
-    });
-
-    let findDoc = await DocSchema.find({ owner: userId }, "-owner");
+    let findUser = await UserSchema.findById(userId, "-email -password")
+      .populate({
+        path: "shared",
+        populate: { path: "owner", select: "name" },
+      })
+      .populate({
+        path: "recentOpened._id",
+        populate: { path: "owner", select: "name" },
+      });
+    let findDoc = await DocSchema.find({ owner: userId }).populate({ path: "owner", select: "name" });
 
     //set user information
     if (findUser) {
