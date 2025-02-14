@@ -32,7 +32,7 @@ describe("get user all information", () => {
         cover: "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         lastModified: "2024-08-30T06:33:09.000Z",
         owner: {
-          _id: "ccccccccc",
+          _id: "66c7d69d0f64ca6985b9345b",
           name: "test3",
         },
       },
@@ -43,6 +43,10 @@ describe("get user all information", () => {
   let myDoc = [
     {
       _id: "66c7d69d0f64ca6985b9173b",
+      owner: {
+        _id: "67adc5a671777708fc743759",
+        name: "Hong",
+      },
       title: "Undefined",
       content: "abc123werdsfaaesf random",
       cover: "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -50,6 +54,10 @@ describe("get user all information", () => {
     },
     {
       _id: "66c7d69d0f64ca6985b9789b",
+      owner: {
+        _id: "67adc5a671777708fc743759",
+        name: "Lee",
+      },
       title: "Undefined",
       content: "test content",
       cover: "https://images.pexels.com/photos/48148/document-agreement-documents-sign-48148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -66,11 +74,17 @@ describe("get user all information", () => {
   });
 
   it("should get user all information", async () => {
-    let mockQuery = {
-      populate: sinon.stub().returns(user),
+    let mockQueryForUser = {
+      // mock chain function populate(xxx).populate(xxx)
+      populate: sinon.stub().returns({
+        populate: sinon.stub().returns(user),
+      }),
     };
-    findByIdStub.returns(mockQuery);
-    findStub.resolves(myDoc);
+    let mockQueryForMyDoc = {
+      populate: sinon.stub().returns(myDoc),
+    };
+    findByIdStub.returns(mockQueryForUser);
+    findStub.returns(mockQueryForMyDoc);
 
     const result = await UserService.getUserALLInfo("66c7d69d0f64ca6985b8765b");
     expect(result).toEqual({
