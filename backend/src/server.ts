@@ -139,7 +139,7 @@ export const socketServer = () => {
         usersInfo?.userList.splice(userIndex, 1);
       }
       // update data in db
-      await UserSchema.findOneAndUpdate({ _id: userId }, { $pull: { shared: docId } });
+      await UserSchema.findOneAndUpdate({ _id: userId }, { $pull: { shared: docId, recentOpened: { _id: docId } } });
 
       // delete user from online list
       const onlineIndex = usersInfo?.onlineList.findIndex((user) => user?._id.toString() === userId);
