@@ -89,9 +89,6 @@ onMounted(async () => {
             new Date(b.lastModified) - new Date(a.lastModified)
         )
         result.data.allDoc = allDoc;
-        console.log(allDoc)
-
-        console.log(result.data)
         Object.assign(userAllInfo, result.data)
     } else if (result.status === "token failed") {
         unauthenticate(result, t);

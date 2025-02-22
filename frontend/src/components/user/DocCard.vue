@@ -4,7 +4,8 @@
             <label :for="id"
                 class="absolute z-auto mt-2 ml-2 p-1 bg-gray-200 rounded-lg text-center text-xs hover:cursor-pointer hover:bg-red-100 opacity-20 hover:opacity-100 ">{{
                     $t('changeCover') }}</label>
-            <input type="file" name="cover" :id="id" class="hidden" ref="modifiedCover">
+            <input type="file" name="cover" :id="id" class="hidden" ref="modifiedCover"
+                accept="image/gif,image/jpeg,image/png">
         </div>
         <RouterLink :to="{
             name: 'editor', params: {

@@ -30,4 +30,7 @@ coverage
 
 *.tsbuildinfo
 .env
+.env.production
+.env.development
+.env.test
 compose.yaml

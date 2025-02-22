@@ -17,8 +17,8 @@ if (process.env.NODE_ENV !== "test") {
   connectDB();
 }
 // Middleware to parse JSON bodies. Increase the limit to 10MB (adjust as needed)
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 //Enable cors
 const corsOption = {
