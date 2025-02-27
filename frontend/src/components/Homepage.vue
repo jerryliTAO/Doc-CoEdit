@@ -7,7 +7,7 @@
                 <img src="../images/meeting.png" class="w-full ">
             </div>
 
-            <!-- 之後引入 login.vue -->
+            <!-- login / sing up -->
             <div class=" flex flex-col items-center m-3">
                 <Login v-show="isShow">
                     <div class="text-center mt-10">
@@ -34,8 +34,7 @@
             </div>
 
             <div class=" flex flex-col items-center m-3">
-                <!-- 之後引入 gif or 實際頁面截圖 -->
-                <img src="../images/meeting.png" class="w-full">
+                <img src="../images/cursor.png" class="w-full">
                 <div class="describeText pb-10">{{ $t('team2') }}</div>
             </div>
         </div>
@@ -48,8 +47,7 @@
             </div>
 
             <div class=" flex flex-col items-center m-3">
-                <!-- 之後引入 gif or 實際頁面截圖 -->
-                <img src="../images/meeting.png" class="w-full">
+                <img src="../images/securePrivacy.gif" class="w-full">
                 <div class="describeText pb-10">{{ $t('privacy2') }}</div>
             </div>
         </div>
@@ -62,8 +60,7 @@
             </div>
 
             <div class=" flex flex-col items-center m-3">
-                <!-- 之後引入 gif or 實際頁面截圖 -->
-                <img src="../images/meeting.png" class="w-full">
+                <img src="../images/mobileDeviceActual.png" class="w-full">
                 <div class="describeText pb-10">{{ $t('mobile2') }}</div>
             </div>
         </div>
@@ -76,8 +73,7 @@
             </div>
 
             <div class=" flex flex-col items-center m-3">
-                <!-- 之後引入 gif or 實際頁面截圖 -->
-                <img src="../images/meeting.png" class="w-full">
+                <img src="../images/exportPDF.png" class="w-full">
                 <div class="describeText pb-10">{{ $t('export2') }}</div>
             </div>
         </div>

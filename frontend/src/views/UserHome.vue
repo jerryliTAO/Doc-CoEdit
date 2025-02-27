@@ -18,8 +18,13 @@
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="modified frame">
                 <DocCard v-for="doc in userAllInfo.allDoc" :id="doc._id" :title="doc.title" :owner="doc.owner.name"
                     :lastmodified="doc.lastModified" :image="doc.cover" :key="doc._id">
+                    <!-- for prod. -->
                     <div class="text-xs">{{ $t('lastModified') }}：{{
-                        moment(doc.lastModified).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
+                        moment(doc.lastModified).utc().format("YYYY-MM-DD HH:mm:ss") }}</div>
+
+                    <!-- for dev display local time -->
+                    <!-- <div class="text-xs">{{ $t('lastModified') }}：{{
+                        moment(doc.lastModified).local().format("YYYY-MM-DD HH:mm:ss") }}</div> -->
                 </DocCard>
             </div>
         </div>
@@ -34,8 +39,13 @@
             <div class="grid grid-cols-G_driver gap-10 mt-5" ref="opened frame">
                 <DocCard v-for="doc in userAllInfo.recentOpened" :id="doc._id?._id" :title="doc._id?.title"
                     :owner="doc._id?.owner.name" :lastmodified="doc._id?.lastModified" :image="doc._id?.cover">
+                    <!-- for prod. -->
                     <div class="text-xs">{{ $t('lastOpened') }}：{{
-                        moment(doc.lastOpened).local().format("YYYY-MM-DD HH:mm:ss") }}</div>
+                        moment(doc.lastOpened).utc().format("YYYY-MM-DD HH:mm:ss") }}</div>
+
+                    <!-- for dev display local time -->
+                    <!-- <div class="text-xs">{{ $t('lastOpened') }}：{{
+                        moment(doc.lastOpened).local().format("YYYY-MM-DD HH:mm:ss") }}</div> -->
                 </DocCard>
             </div>
         </div>
