@@ -82,7 +82,7 @@ Doc-CoEdit is an on-line document editor which allows you to co-edit with other 
 
 ### Environment/Web Framework
 
-- Node.js / Express.js
+- Node.js / Express.js (using Typescript)
 
 ### GCP Cloud Services
 
@@ -157,6 +157,8 @@ Doc-CoEdit is an on-line document editor which allows you to co-edit with other 
 - Git / GitHub
 
 ## API Doc
+
+- [API Doc](https://app.swaggerhub.com/apis-docs/jerryli-ffe/doc-coedit/1.0.0#)
 
 ## Contact
 
