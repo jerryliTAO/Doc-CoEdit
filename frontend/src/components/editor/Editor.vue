@@ -89,6 +89,7 @@ Quill.register("modules/cursors", QuillCursors)
 import router from '@/router';
 import { useDeleteStore } from '@/stores/delete';
 import { useUserListStore } from '@/stores/user';
+import axios from '@/utils/axios';
 import { COLOR_REPOSITORY } from '@/utils/colorRepository';
 import moment from 'moment';
 import Quill from 'quill';
@@ -106,6 +107,7 @@ const COLOR_INDEX = Math.floor(Math.random() * (COLOR_REPOSITORY.length + 1))
 const editor = ref();
 const grantedEmailElement = ref();
 const SOCKET_URL = import.meta.env.VITE_APP_SOCKET_URL;
+const API_URL = import.meta.env.VITE_APP_BASE_URL;
 const docId = location.pathname.split('/')[2]
 const userId = localStorage.getItem("userId") || '';
 const userName = ref();
@@ -180,9 +182,30 @@ const grantAccess = () => {
 }
 
 
+
+
+
+
+
+
 // ===== socket =====
 const socket = io(SOCKET_URL);
-onMounted(() => {
+onMounted(async () => {
+    let getAccessResult = await axios.get(API_URL + '/api/doc/test/' + userId + '/' + docId).then(res => {
+        return res.data
+    }).catch(error => {
+        console.log(error.response)
+        if (error.response.status == "404") {
+            return router.replace({ name: "NotFound" })
+        }
+
+        alert(error.response.data.msg)
+        router.replace('/user');
+    })
+
+
+
+
     // ===== join =====
     socket.emit("join", { userId: userId, docId: docId, lastOpened: moment().format("YYYY-MM-DD HH:mm:ss") })
 

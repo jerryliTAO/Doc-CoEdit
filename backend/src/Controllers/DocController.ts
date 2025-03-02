@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import * as DocService from "../Services/DocService";
 import { responseStatus } from "../interfaces/response";
+import { DocSchema } from "../models/DocSchema";
+import { UserSchema } from "../models/UserSchema";
 
 // create a new doc
 export const createDoc: RequestHandler = async (req, res) => {
@@ -51,7 +53,7 @@ export const addAccess: RequestHandler = async (req, res) => {
         status: "failed",
         msg: "Can't share to yourself.",
       };
-      return res.status(404).send(result);
+      return res.status(400).send(result);
     } else {
       result = {
         status: "failed",
@@ -67,6 +69,34 @@ export const addAccess: RequestHandler = async (req, res) => {
     };
     return res.status(500).send(result);
   }
+};
+
+// check access to document
+export const getAccess: RequestHandler = async (req, res) => {
+  let result: responseStatus = {};
+  const { userId, docId } = req.params;
+  const isDocIdValid = Types.ObjectId.isValid(docId);
+  if (!isDocIdValid) {
+    return res.status(404).send("error page");
+  }
+  const doc = await DocSchema.findOne({ _id: docId }, "owner");
+  const user = await UserSchema.findById(userId, "shared");
+  if (doc?.owner && user?.shared) {
+    if (doc.owner.toString() == userId || user.shared.includes(new Types.ObjectId(docId))) {
+      return res.status(200).send("success");
+    } else {
+      result = {
+        status: "failed",
+        msg: "you don't have access to the document",
+      };
+      return res.status(403).send(result);
+    }
+  }
+  result = {
+    status: "failed",
+    msg: "There're some errors in server",
+  };
+  return res.status(500).send(result);
 };
 
 // get my doc
@@ -104,7 +134,7 @@ export const getMyShared: RequestHandler = async (req, res) => {
       return res.status(200).send(result);
     }
     result = {
-      status: "success",
+      status: "failed",
       msg: "There're some error.",
     };
     return res.status(404).send(result);
@@ -122,7 +152,7 @@ export const getMyShared: RequestHandler = async (req, res) => {
 export const deleteDocById: RequestHandler = async (req, res) => {
   let result: responseStatus = {};
   try {
-    const { docId } = req.body;
+    const { docId } = req.params;
     const deleteDocResult = await DocService.deleteDocById(docId);
     if (deleteDocResult === 1) {
       result = {
