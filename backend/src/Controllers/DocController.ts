@@ -76,15 +76,25 @@ export const getAccess: RequestHandler = async (req, res) => {
   let result: responseStatus = {};
   const { userId, docId } = req.params;
   const isDocIdValid = Types.ObjectId.isValid(docId);
+
+  // irregularity id format
   if (!isDocIdValid) {
     return res.status(404).send("error page");
   }
+
   const doc = await DocSchema.findOne({ _id: docId }, "owner");
   const user = await UserSchema.findById(userId, "shared");
+
+  // document not found
+  if (doc == null) {
+    return res.status(404).send("error page");
+  }
+
   if (doc?.owner && user?.shared) {
     if (doc.owner.toString() == userId || user.shared.includes(new Types.ObjectId(docId))) {
       return res.status(200).send("success");
     } else {
+      // user don't have doc access
       result = {
         status: "failed",
         msg: "you don't have access to the document",

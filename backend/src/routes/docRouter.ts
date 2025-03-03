@@ -10,7 +10,7 @@ docRouter.post("/addAccess", DocController.addAccess);
 // ======= Receive ======
 docRouter.get("/myDoc/:userId", DocController.getMyDoc);
 docRouter.get("/myShared/:userId", DocController.getMyShared);
-docRouter.get("/test/:userId/:docId", DocController.getAccess);
+docRouter.get("/:userId/:docId", DocController.getAccess);
 
 //======= Update ======
 docRouter.patch("/updateCover", DocController.updateDocCover);

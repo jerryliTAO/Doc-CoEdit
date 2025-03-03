@@ -182,29 +182,24 @@ const grantAccess = () => {
 }
 
 
-
-
-
-
+// ===== check if the user have access to the document =====
+let getAccessResult = async () => {
+    await axios.get(API_URL + '/api/doc/' + userId + '/' + docId).then(res => {
+        return res.data
+    }).catch(error => {
+        if (error.response.status == "404") {
+            return router.replace({ name: "NotFound" })
+        }
+        alert(error.response.data.msg)
+        router.replace('/user');
+    })
+}
+getAccessResult();
 
 
 // ===== socket =====
 const socket = io(SOCKET_URL);
-onMounted(async () => {
-    let getAccessResult = await axios.get(API_URL + '/api/doc/test/' + userId + '/' + docId).then(res => {
-        return res.data
-    }).catch(error => {
-        console.log(error.response)
-        if (error.response.status == "404") {
-            return router.replace({ name: "NotFound" })
-        }
-
-        alert(error.response.data.msg)
-        router.replace('/user');
-    })
-
-
-
+onMounted(() => {
 
     // ===== join =====
     socket.emit("join", { userId: userId, docId: docId, lastOpened: moment().format("YYYY-MM-DD HH:mm:ss") })
