@@ -34,3 +34,5 @@ coverage
 .env.development
 .env.test
 compose.yaml
+CD.sh
+CD.ts
