@@ -272,9 +272,10 @@ onMounted(() => {
 
     // ===== inform every online user that somebody left =====
     socket.on("user-leave", (data) => {
-        const { name, onlineList } = data
+        const { userId, name, onlineList } = data
         usersInfo.onlineList = onlineList
         leaveUserName.value = name
+        cursors.removeCursor(userId);
 
         isUserOut.value = true;
         timerInterval(timerElement2.value)

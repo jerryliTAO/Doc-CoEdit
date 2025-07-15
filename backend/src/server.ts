@@ -99,11 +99,12 @@ export const socketServer = () => {
         name = doc?.onlineList[index]?.name;
         doc?.onlineList.splice(index, 1);
       }
-      if (doc?.onlineList.length === 1) {
+      if (doc?.onlineList.length === 0) {
         docs.delete(docId);
       }
       socket.leave(docId);
       io.to(docId).emit("user-leave", {
+        userId: userId,
         name: name,
         onlineList: doc?.onlineList,
       });

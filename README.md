@@ -10,7 +10,7 @@ Doc-CoEdit is an on-line document editor which allows you to co-edit with other 
 <br/>
 
 - Website : https://doc-coedit.xyz
-- Test Account : Test123@gmail.com
+- Test Account : test123@gmail.com
 - Password : test123
 - Demo
   ![Demo](./Demo.gif)
