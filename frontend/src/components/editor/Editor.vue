@@ -412,8 +412,16 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     // ===== leave the doc and disconnect the socket =====
-    socket.emit('leave', { userId: userId, docId: docId });
-    socket.disconnect();
+    socket.emit('leave', { userId: userId, docId: docId }, () => {
+        // make sure the leave event is sent before disconnect
+        socket.disconnect();
+    });
+
+    // avoid net speed too slow to run callback
+    setTimeout(() => {
+        socket.disconnect();
+    }, 500);
+
 })
 
 </script>

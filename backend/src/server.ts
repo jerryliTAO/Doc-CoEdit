@@ -89,7 +89,7 @@ export const socketServer = () => {
     });
 
     // ===== user leave the document =====
-    socket.on("leave", (data) => {
+    socket.on("leave", (data, callback) => {
       const { userId, docId } = data;
       let doc = docs.get(docId);
       let name: string | undefined;
@@ -108,6 +108,9 @@ export const socketServer = () => {
         name: name,
         onlineList: doc?.onlineList,
       });
+      if (typeof callback === "function") {
+        callback();
+      }
     });
 
     // ===== grant access =====
